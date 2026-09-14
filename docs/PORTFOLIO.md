@@ -8,7 +8,9 @@ MartinCall is a personal, non-commercial project by **Grigory Shmykov**, develop
 
 The project began with a specific frustration while using TradingView. When constructing a chart channel, I encountered drawing objects that would not appear until the relevant historical bars had been loaded into memory. I repeatedly had to drag the chart left to load those bars and deal with inconsistent display behavior. It interrupted the analysis I was trying to perform.
 
-That experience prompted me to build my own tool. The starting point was a practical charting problem; through successive ideas, implementation and review, the initial MVP grew into the broader MartinCall system described here. This account describes my experience at the time, rather than a general claim about every TradingView version or workflow.
+A second constraint was the size limit on compiled Pine Script programs, measured in intermediate-language tokens. It restricted the custom scripts and indicators I wanted to develop. TradingView documents these [compiled-script limits](https://www.tradingview.com/pine-script-docs/writing/limitations/#compiled-tokens). Building an independent application let me develop the analysis logic outside Pine’s execution environment and control the associated architecture and resource tradeoffs.
+
+Together, these experiences prompted me to build my own tool. The starting point was a practical charting problem; through successive ideas, implementation and review, the initial MVP grew into the broader MartinCall system described here. This account describes my experience at the time, rather than a general claim about every TradingView version or workflow.
 
 ## Role, contribution and evidence
 

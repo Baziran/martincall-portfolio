@@ -2,7 +2,7 @@
 
 **From a rough MVP to a working market-research system with explicit architecture, operating rules and acceptance checks.**
 
-**Why I started:** in my TradingView workflow, constructing a chart channel meant repeatedly dragging the chart left to load older bars before the drawing objects would appear. Loading and display problems kept interrupting the analysis. That practical frustration started MartinCall: an attempt to gain control over the charting workflow that later grew into a broader research system.
+**Why I started:** in my TradingView workflow, constructing a chart channel meant repeatedly dragging the chart left to load older bars before the drawing objects would appear. Loading and display problems kept interrupting the analysis. Pine Script’s compiled-code limits also constrained the custom scripts and indicators I wanted to develop. Together, these constraints motivated an independent application where I could control the charting workflow and extend the analysis logic outside the Pine runtime.
 
 By **Grigory Shmykov** — project initiator and product owner, responsible for technical direction and acceptance. Over six months, I led its evolution from a quickly assembled MVP to a working personal system with clear architectural responsibilities and stricter quality rules: requirements, solution review, implementation cycles, performance and interface refinement, operational feedback and acceptance. It complements my professional background in manufacturing management and enterprise IT, with particular relevance to **technical project management, systems integration and IT implementation leadership**.
 
