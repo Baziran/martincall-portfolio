@@ -1,0 +1,1206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MartinCall</title>
+</head>
+<body class="__DEBUG_CLASS__">
+  <!-- DEBUG_PANEL_START -->
+  <div id="debug-panel" class="debug-panel">
+    <div class="debug-title">
+      <span>MartinCall Debug</span>
+      <span id="debug-phase">HTML loaded</span>
+    </div>
+    <pre id="debug-log">HTML rendered. Waiting for JavaScript...</pre>
+    <pre id="debug-perf" class="debug-perf"></pre>
+  </div>
+  <!-- DEBUG_PANEL_END -->
+  <main>
+    <section class="chart-panel">
+      <div class="chart-top">
+        <div class="chart-title-row">
+          <span id="vitality-health" class="vitality-health boot" title="System health" aria-label="System health">
+            <canvas class="vitality-candles" width="16" height="16" aria-hidden="true"></canvas>
+            <svg class="vitality-frame" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+              <rect class="vitality-track" x="1.5" y="1.5" width="13" height="13" rx="1.5"/>
+              <rect class="vitality-snake" x="1.5" y="1.5" width="13" height="13" rx="1.5"/>
+            </svg>
+            <span class="vitality-alert" aria-hidden="true">!</span>
+          </span>
+          <div id="chart-title">Loading MartinCall...</div>
+        </div>
+        <div class="chart-tools">
+          <span id="history-notice" class="history-notice"></span>
+          <button id="live-toggle" class="tool-button chart-nav-button" type="button" title="Return to the current market" aria-label="Go Live" hidden>Go Live</button>
+          <span class="chart-range-group">
+            <span class="chart-range-separator" aria-hidden="true"></span>
+            <button id="chart-range-toggle" class="tool-button chart-range-toggle" type="button" title="Chart range presets" aria-label="Chart range presets" aria-expanded="false">
+              <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2.05" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="2.2"/><path d="M7.5 2.5v4M16.5 2.5v4M3 9h18"/><path d="M7 13h2.2M11 13h2.2M15 13h2.2M7 17h2.2M11 17h2.2M15 17h2.2"/></svg>
+            </button>
+            <div id="chart-range-menu" class="chart-range-menu hidden" role="menu" aria-label="Chart range presets">
+              <button type="button" data-chart-range-preset="1d">1D</button>
+              <button type="button" data-chart-range-preset="5d">5D</button>
+              <button type="button" data-chart-range-preset="1m">1M</button>
+              <button type="button" data-chart-range-preset="3m">3M</button>
+              <button type="button" data-chart-range-preset="6m">6M</button>
+            </div>
+          </span>
+          <span id="timeframe-buttons" class="timeframe-buttons"></span>
+          <span class="chart-status-strip">
+            <button id="data-health-badge" class="quality-badge" type="button" title="Market data status; click to copy details">DATA --</button>
+            <span id="ibkr-status-badge" class="quality-badge warn" title="IBKR Gateway status">IBKR --</span>
+            <span id="tz-label" class="muted hidden"></span>
+          </span>
+          <span id="draw-status" class="draw-status">cursor</span>
+          <span id="draw-tools" class="draw-tools">
+            <span id="cursor-mode-control" class="cursor-mode-control">
+              <button id="drawing-cursor" class="tool-button active" data-drawing-tool="cursor" title="Cursor / pan">
+                <svg viewBox="0 0 24 24" class="icon"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg>
+              </button>
+              <button id="cursor-mode-toggle" class="cursor-mode-toggle" type="button" title="Cursor mode" aria-label="Cursor mode" aria-haspopup="menu" aria-controls="cursor-mode-menu" aria-expanded="false">
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg>
+              </button>
+              <span id="cursor-mode-menu" class="cursor-mode-menu hidden" role="menu" aria-label="Cursor mode">
+                <button type="button" role="menuitemradio" data-cursor-mode="normal" aria-checked="true">Normal</button>
+                <button type="button" role="menuitemradio" data-cursor-mode="informative" aria-checked="false">Informative</button>
+              </span>
+            </span>
+            <button class="tool-button" data-drawing-tool="text" title="Text label">
+              <svg viewBox="0 0 24 24" class="icon"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+            </button>
+            <span id="line-tool-control" class="line-tool-control">
+              <button id="drawing-line" class="tool-button" type="button" data-drawing-tool="line" title="Trend line" aria-label="Trend line">
+                <svg viewBox="0 0 24 24" class="icon"><path d="M19 5L5 19"/><circle cx="19" cy="5" r="1.5" fill="currentColor"/><circle cx="5" cy="19" r="1.5" fill="currentColor"/></svg>
+              </button>
+              <button id="line-tool-toggle" class="line-tool-toggle" type="button" title="Line tools" aria-label="Line tools" aria-haspopup="menu" aria-controls="line-tool-menu" aria-expanded="false">
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg>
+              </button>
+              <span id="line-tool-menu" class="line-tool-menu hidden" role="menu" aria-label="Line tool">
+                <button type="button" role="menuitemradio" data-line-tool-mode="line" aria-checked="true">Trend line</button>
+                <button type="button" role="menuitemradio" data-line-tool-mode="ruler" aria-checked="false">Ruler</button>
+              </span>
+            </span>
+            <button class="tool-button" data-drawing-tool="zone" title="Price zone">
+              <svg viewBox="0 0 24 24" class="icon"><rect x="4" y="6" width="16" height="12" rx="1"/></svg>
+            </button>
+            <button class="tool-button" data-drawing-tool="channel" title="Parallel channel">
+              <svg viewBox="0 0 24 24" class="icon"><path d="M3 14L15 2m-6 20L21 10"/></svg>
+            </button>
+            <button class="tool-button" data-drawing-tool="fib" title="Fibonacci ruler">
+              <svg viewBox="0 0 12 12" class="icon icon-fib-ruler" aria-hidden="true"><line class="fib-diagonal" x1="2" y1="2" x2="10" y2="10"/><line x1="1" y1="2" x2="11" y2="2"/><line x1="1" y1="5" x2="11" y2="5"/><line x1="1" y1="8" x2="11" y2="8"/><line x1="1" y1="11" x2="11" y2="11"/></svg>
+            </button>
+            <button class="tool-button" data-drawing-tool="ellipse" title="Ellipse">
+              <svg viewBox="0 0 24 24" class="icon"><ellipse cx="12" cy="12" rx="9" ry="6"/></svg>
+            </button>
+            <button class="tool-button" data-drawing-tool="path" title="Trade plan path">
+              <svg viewBox="0 0 24 24" class="icon"><path d="M3 19l4-4 4 4 10-10"/><circle cx="3" cy="19" r="1.5" fill="currentColor"/><circle cx="7" cy="15" r="1.5" fill="currentColor"/><circle cx="11" cy="19" r="1.5" fill="currentColor"/><circle cx="21" cy="9" r="1.5" fill="currentColor"/></svg>
+            </button>
+            <button id="drawing-magnet" class="tool-button active" title="Snap drawings to nearest visible candle high/low" aria-label="Snap drawings to nearest visible candle high/low"></button>
+            <button id="drawing-visibility" class="tool-button active" title="Hide/show drawing objects" aria-label="Hide/show drawing objects"></button>
+            <button id="drawing-delete" class="tool-button" title="Delete selected drawing">
+              <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2.35" stroke-linecap="round" stroke-linejoin="round"><path d="M2.75 6h18.5M8 6V3.75c0-.9.85-1.65 1.9-1.65h4.2c1.05 0 1.9.75 1.9 1.65V6m3 0-.65 14.15c-.05 1.05-.95 1.85-2 1.85h-8.7c-1.05 0-1.95-.8-2-1.85L5 6m4.75 5.2v6.6m4.5-6.6v6.6"/></svg>
+            </button>
+            <button id="drawing-clear" class="tool-button" title="Open drawing object manager">
+              <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            </button>
+          </span>
+          <button id="theme-toggle" class="tool-button chart-theme-toggle" type="button" title="Switch theme" aria-label="Switch theme"></button>
+          <button id="gex-mode-toggle" class="tool-button chart-gex-toggle" type="button" title="Toggle GEX indicator preset">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </button>
+          <button id="settings-toggle" class="tool-button chart-settings-button" title="Settings" aria-label="Settings" aria-controls="settings-panel" aria-haspopup="dialog" aria-expanded="false">
+            <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M10 2h4l.7 4.05a6.7 6.7 0 0 1 1.38.8l3.84-1.48 2 3.46-3.1 2.58a7.1 7.1 0 0 1 0 1.18l3.1 2.58-2 3.46-3.84-1.48a6.7 6.7 0 0 1-1.38.8L14 22h-4l-.7-4.05a6.7 6.7 0 0 1-1.38-.8l-3.84 1.48-2-3.46 3.1-2.58a7.1 7.1 0 0 1 0-1.18l-3.1-2.58 2-3.46 3.84 1.48a6.7 6.7 0 0 1 1.38-.8L10 2Zm2 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" clip-rule="evenodd"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="price-frame" class="chart-frame price-frame">
+        <div class="frame-title"><span>Price</span><span id="price-height-label">auto</span></div>
+        <button id="chart-advisor-toggle" class="chart-advisor-button" type="button" title="Classic: full indicator labels and per-indicator plans" aria-pressed="false">Classic</button>
+        <div id="gex-sidebar-chrome" class="gex-sidebar-chrome hidden" aria-label="GEX sidebar controls">
+          <div class="gex-sidebar-header">
+            <div id="gex-sidebar-status" class="gex-sidebar-status warn" role="status" aria-live="polite">GEX · waiting</div>
+            <button id="gex-sidebar-settings-toggle" class="gex-sidebar-icon-button" type="button" title="GEX sidebar settings" aria-label="GEX sidebar settings" aria-controls="gex-sidebar-settings" aria-haspopup="dialog" aria-expanded="false">
+              <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M10 2h4l.7 4.05a6.7 6.7 0 0 1 1.38.8l3.84-1.48 2 3.46-3.1 2.58a7.1 7.1 0 0 1 0 1.18l3.1 2.58-2 3.46-3.84-1.48a6.7 6.7 0 0 1-1.38.8L14 22h-4l-.7-4.05a6.7 6.7 0 0 1-1.38-.8l-3.84 1.48-2-3.46 3.1-2.58a7.1 7.1 0 0 1 0-1.18l-3.1-2.58 2-3.46 3.84 1.48a6.7 6.7 0 0 1 1.38-.8L10 2Zm2 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" clip-rule="evenodd"/></svg>
+            </button>
+          </div>
+          <div class="gex-sidebar-actions">
+            <button id="gex-context-mode-toggle" class="gex-context-mode-button" type="button" title="Switch GEX capture cadence">RQST</button>
+            <button id="gex-sidebar-refresh" class="gex-sidebar-refresh-button" type="button" title="Refresh GEX option-chain levels" aria-label="Refresh GEX option-chain levels">↻</button>
+          </div>
+          <div id="gex-sidebar-settings" class="gex-sidebar-settings hidden" role="dialog" aria-label="GEX sidebar settings">
+            <label class="gex-sidebar-setting-row" for="gex-context-toggle" title="Enable the GEX data layer. Off stops cached snapshot reads and live option-chain refreshes unless GEX focus mode keeps the layer active.">
+              <span>GEX context</span>
+              <span class="gex-sidebar-toggle-control">
+                <input id="gex-context-toggle" type="checkbox">
+                <span>On</span>
+              </span>
+            </label>
+            <label class="gex-sidebar-setting-row" for="gex-scheduler-toggle" title="Automatically refresh GEX option-chain data through the backend scheduler.">
+              <span>Auto refresh</span>
+              <span class="gex-sidebar-toggle-control">
+                <input id="gex-scheduler-toggle" type="checkbox">
+                <span>Auto</span>
+              </span>
+            </label>
+            <details class="gex-scheduler-picker">
+              <summary title="Choose provider-qualified instruments for automatic GEX refresh">
+                <span>Auto refresh instruments</span>
+                <strong id="gex-scheduler-instrument-summary">None selected</strong>
+              </summary>
+              <select id="gex-scheduler-instrument-ids" class="settings-control gex-scheduler-instrument-list" multiple size="8" aria-label="Provider-qualified instruments for automatic GEX refresh"></select>
+              <div class="gex-scheduler-picker-note">Backend scheduler contracts. Use Cmd/Ctrl-click to select multiple instruments.</div>
+            </details>
+            <label class="gex-sidebar-setting-row" for="gex-dynamics-toggle" title="Show typed GEX structure analytics. This is display-only; the GEX engine follows the active context layer.">
+              <span>GEX dynamics</span>
+              <span class="gex-sidebar-toggle-control">
+                <input id="gex-dynamics-toggle" type="checkbox">
+                <span>Dyn</span>
+              </span>
+            </label>
+            <div class="gex-sidebar-settings-section">
+              <div class="gex-sidebar-settings-label">Sidebar mode</div>
+              <div id="gex-view-menu" class="gex-sidebar-choice-grid" role="group" aria-label="GEX sidebar profile mode">
+                <button data-gex-view-mode="off" type="button">Off</button>
+                <button data-gex-view-mode="mini" type="button">Mini</button>
+                <button data-gex-view-mode="ladder" type="button">Ladder</button>
+                <button data-gex-view-mode="expiry" type="button">Expiry</button>
+              </div>
+            </div>
+            <div class="gex-sidebar-settings-section">
+              <div class="gex-sidebar-settings-label">Price levels</div>
+              <div id="gex-zone-menu" class="gex-sidebar-choice-grid" role="group" aria-label="GEX price-level rendering mode">
+                <button data-gex-zone-mode="off" type="button">Off</button>
+                <button data-gex-zone-mode="zones" type="button">Zones</button>
+                <button data-gex-zone-mode="lines" type="button">Lines</button>
+                <button data-gex-zone-mode="strike" type="button">Strike</button>
+              </div>
+            </div>
+            <div class="gex-sidebar-settings-section">
+              <div class="gex-sidebar-settings-label">Level history</div>
+              <div id="gex-history-menu" class="gex-sidebar-choice-grid" role="group" aria-label="GEX level-history rendering mode">
+                <button data-gex-history-view="last" type="button" title="Show only the most recent GEX level snapshot">Last</button>
+                <button data-gex-history-view="1d" type="button" title="Show the latest one-day window of stored GEX levels">1 day</button>
+                <button data-gex-history-view="2d" type="button" title="Show the latest two-day window of stored GEX levels">2 days</button>
+              </div>
+            </div>
+            <label class="gex-sidebar-setting-row" for="gex-display-levels">
+              <span>Published levels</span>
+              <select id="gex-display-levels" class="settings-control" title="Show the top 11, 15 or 21 published GEX strike levels by canonical selection rank" aria-label="Displayed GEX strike level count">
+                <option value="11">11</option>
+                <option value="15">15</option>
+                <option value="21">21</option>
+              </select>
+            </label>
+            <label class="gex-sidebar-width-setting" for="gex-sidebar-width">
+              <span>Sidebar width</span>
+              <output id="gex-sidebar-width-value" for="gex-sidebar-width">248 px</output>
+              <input id="gex-sidebar-width" type="range" min="154" max="420" step="1" value="248" aria-label="GEX sidebar width">
+            </label>
+          </div>
+          <div id="gex-sidebar-resizer" class="gex-sidebar-resizer" role="separator" aria-label="Resize GEX sidebar" aria-orientation="vertical" aria-valuemin="154" aria-valuemax="420" aria-valuenow="248" aria-valuetext="248 px" tabindex="0"></div>
+        </div>
+        <button id="option-board-toggle" class="option-board-button hidden" type="button" title="Open live option prices" aria-label="Open live option prices" aria-pressed="false">
+          <svg class="option-board-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M3 7h18" />
+            <path d="M10 3v18" />
+            <path d="M14 3v18" />
+            <path d="M10 11h4" />
+            <path d="M10 15h4" />
+            <path d="M10 19h4" />
+            <path d="M6 11h.01" />
+            <path d="M18 11h.01" />
+            <path d="M6 15h.01" />
+            <path d="M18 15h.01" />
+            <path d="M6 19h.01" />
+            <path d="M18 19h.01" />
+          </svg>
+        </button>
+        <canvas id="price-chart" role="img" tabindex="0" aria-label="Price chart" aria-roledescription="interactive chart" aria-describedby="chart-keyboard-help chart-accessible-status" aria-keyshortcuts="ArrowLeft ArrowRight Home End Escape"></canvas>
+        <canvas id="price-overlay" aria-hidden="true"></canvas>
+        <canvas id="price-gex-levels" aria-hidden="true"></canvas>
+        <canvas id="price-objects" aria-hidden="true"></canvas>
+        <canvas id="price-trading" aria-hidden="true"></canvas>
+        <canvas id="price-interaction" aria-hidden="true"></canvas>
+        <canvas id="price-gex-front" aria-hidden="true"></canvas>
+        <section id="mtf-lens" class="mtf-lens hidden" data-anchor="bottom-left" aria-label="Multi-timeframe candle lens" aria-hidden="true">
+          <header class="mtf-lens-header">
+            <strong id="mtf-lens-title" class="mtf-lens-title">MTF Lens</strong>
+            <span id="mtf-lens-status" class="mtf-lens-status" role="status" aria-live="polite">Waiting</span>
+            <button id="mtf-lens-anchor" class="mtf-lens-header-button" type="button" title="Move MTF Lens to the next corner" aria-label="Move MTF Lens to the next corner">&#9635;</button>
+            <button id="mtf-lens-close" class="mtf-lens-header-button" type="button" title="Close MTF Lens" aria-label="Close MTF Lens">&#215;</button>
+          </header>
+          <div class="mtf-lens-plot">
+            <canvas id="mtf-lens-chart" role="img" aria-label="Secondary timeframe candle chart"></canvas>
+            <canvas id="mtf-lens-interaction" aria-hidden="true"></canvas>
+          </div>
+          <button id="mtf-lens-resize" class="mtf-lens-resize" type="button" title="Resize MTF Lens" aria-label="Resize MTF Lens"></button>
+        </section>
+        <button id="price-fit-height" class="price-fit-height-button" type="button" title="Fit price scale" aria-label="Fit price scale">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2" width="8" height="20" rx="1"/><line x1="2.5" y1="5.5" x2="6.5" y2="5.5"/><line x1="2.5" y1="9" x2="5" y2="9"/><line x1="2.5" y1="12" x2="6.5" y2="12"/><line x1="2.5" y1="15" x2="5" y2="15"/><line x1="2.5" y1="18.5" x2="6.5" y2="18.5"/><line x1="17.5" y1="3.5" x2="17.5" y2="20.5"/><polyline points="14,7 17.5,3.5 21,7"/><polyline points="14,17 17.5,20.5 21,17"/></svg>
+        </button>
+        <p id="chart-keyboard-help" class="sr-only">Focus a chart, then use Left and Right Arrow, Home, or End to inspect loaded candles. Press Escape to clear the chart cursor.</p>
+        <div id="chart-accessible-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true">Chart cursor waiting.</div>
+        <div id="direction-sentiment-light" class="direction-sentiment-light flat" aria-label="Direction sentiment waiting" data-tooltip="Direction sentiment waiting">
+          <span id="direction-sentiment-dot" class="direction-sentiment-dot"></span>
+          <b id="direction-sentiment-score">50</b>
+        </div>
+      </div>
+      <div id="horizontal-splitter" class="splitter horizontal" title="Drag to resize price and volume"></div>
+      <div id="volume-frame" class="chart-frame volume-frame">
+        <div class="frame-title"><span>Volume</span><span id="volume-height-label">160 px</span></div>
+        <div id="urgent-risk-feed" class="urgent-risk-feed" role="status" aria-live="polite"></div>
+        <canvas id="volume-chart" role="img" tabindex="0" aria-label="Volume chart" aria-roledescription="interactive chart" aria-describedby="chart-keyboard-help chart-accessible-status" aria-keyshortcuts="ArrowLeft ArrowRight Home End Escape"></canvas>
+        <canvas id="volume-interaction" aria-hidden="true"></canvas>
+      </div>
+    </section>
+    <section id="workspace-dock" class="workspace-dock collapsed" aria-label="Workspace dock">
+      <div id="workspace-dock-resizer" class="workspace-dock-resizer" role="separator" aria-label="Resize workspace dock" aria-orientation="vertical" aria-valuemin="220" aria-valuemax="640" aria-valuenow="300" tabindex="0"></div>
+      <nav class="workspace-dock-rail" role="tablist" aria-label="Workspace tools">
+        <button id="indicator-lens-toggle" class="workspace-dock-tab" type="button" role="tab" data-workspace-dock-surface="indicator-lens" aria-expanded="false" aria-selected="false" aria-controls="indicator-lens-surface" title="Open Indicator Lens">
+          <span>IN</span><b>LENS</b><em id="indicator-lens-count" hidden>0</em>
+        </button>
+        <button id="option-drive-toggle" class="workspace-dock-tab" type="button" role="tab" data-workspace-dock-surface="option-drive" aria-expanded="false" aria-selected="false" aria-controls="option-drive" title="Open Option Drive">
+          <span>OD</span><b>DRIVE</b>
+        </button>
+        <button id="gex-dock-toggle" class="workspace-dock-tab" type="button" role="tab" data-workspace-dock-surface="gex" aria-expanded="false" aria-selected="false" aria-controls="gex-dock-surface" title="Open GEX in workspace dock">
+          <span>GX</span><b>GEX</b>
+        </button>
+      </nav>
+      <div class="workspace-dock-body">
+        <section id="gex-dock-surface" class="workspace-dock-surface gex-dock-surface" data-workspace-dock-panel="gex" aria-label="GEX profile aligned with chart prices" aria-hidden="true" hidden>
+          <div id="gex-dock-profile" class="gex-dock-profile">
+            <canvas id="gex-dock-canvas" aria-label="GEX price profile"></canvas>
+          </div>
+        </section>
+        <section id="indicator-lens-surface" class="workspace-dock-surface indicator-lens-surface" data-workspace-dock-panel="indicator-lens" aria-label="Indicator Lens" aria-hidden="true" hidden>
+          <header class="indicator-lens-head">
+            <div><b>INDICATOR LENS</b><span>Compact tables assigned to the dock</span></div>
+            <button id="indicator-lens-collapse" class="tool-button" type="button" title="Collapse Indicator Lens" aria-label="Collapse Indicator Lens">×</button>
+          </header>
+          <div id="indicator-lens-tables" class="indicator-lens-tables"></div>
+        </section>
+        <section id="option-drive" class="workspace-dock-surface option-drive" data-workspace-dock-panel="option-drive" aria-label="Option Drive paper trading panel" aria-hidden="true" hidden>
+          <div id="option-drive-surface" class="option-drive-surface" aria-hidden="true">
+        <header class="option-drive-head">
+          <div>
+            <b>OPTION DRIVE</b>
+            <span id="option-drive-contract-label">Select and lock an exact contract</span>
+          </div>
+          <span id="option-drive-status" class="quality-badge muted" data-state="closed" data-state-kind="disabled" aria-busy="false">CLOSED</span>
+          <span class="option-drive-paper-badge">PAPER</span>
+          <button id="option-drive-collapse" class="tool-button" type="button" title="Collapse Option Drive" aria-label="Collapse Option Drive">×</button>
+        </header>
+        <div class="option-drive-instrument-row">
+          <label for="option-drive-instrument">TRADE</label>
+          <select id="option-drive-instrument" aria-label="Option Drive trading instrument"></select>
+          <span id="option-drive-chart-instrument" title="Price chart instrument">CHART —</span>
+        </div>
+        <div class="option-drive-controls">
+          <div id="option-drive-expiry-tabs" class="option-drive-tabs" role="tablist" aria-label="Option expiry">
+            <button type="button" role="tab" data-option-drive-expiry="0dte" aria-selected="true">0DTE</button>
+            <button type="button" role="tab" data-option-drive-expiry="1dte" aria-selected="false">1DTE</button>
+          </div>
+          <label class="option-drive-qty"><span>QTY</span><input id="option-drive-qty" type="number" min="1" max="100" step="1" value="1" inputmode="numeric"></label>
+          <button id="option-drive-lock" class="option-drive-lock" type="button" disabled>LOCK STRIKE</button>
+          <button id="option-drive-arm" class="option-drive-arm" type="button" disabled aria-pressed="false">ARM</button>
+        </div>
+        <div id="option-drive-execution-eligibility" class="execution-eligibility" role="status" aria-live="polite" data-state="blocked" data-state-kind="error">
+          <strong class="execution-eligibility-action bad">ACTION BLOCKED</strong>
+          <span class="execution-eligibility-fact bad">ROUTE BLOCKED</span>
+          <span class="execution-eligibility-fact muted">CONTRACT NO DATA</span>
+          <span class="execution-eligibility-fact muted">BBO NO DATA</span>
+          <span class="execution-eligibility-fact warn">SESSION UNKNOWN</span>
+        </div>
+        <div id="option-drive-message" class="option-drive-message" role="status" aria-live="polite">Open the panel to load the exact option chain.</div>
+        <div class="option-drive-workbench">
+          <section class="option-drive-chain" aria-label="Exact option contracts">
+            <div class="option-drive-section-title"><span>CALL</span><b>STRIKE</b><span>PUT</span></div>
+            <div id="option-drive-chain-rows" class="option-drive-chain-rows"></div>
+          </section>
+          <section class="option-drive-ladder" aria-label="Option premium ladder">
+            <div class="option-drive-ladder-head">
+              <span id="option-drive-bid">BID —</span>
+              <b id="option-drive-mid">MID —</b>
+              <span id="option-drive-ask">ASK —</span>
+            </div>
+            <div class="option-drive-ladder-columns" aria-hidden="true"><span>BUY LMT</span><b>PRICE</b><span>SELL LMT</span></div>
+            <div id="option-drive-ladder-rows" class="option-drive-ladder-rows"></div>
+          </section>
+        </div>
+        <section id="option-drive-journal" class="option-drive-journal expanded">
+          <button id="option-drive-journal-toggle" class="option-drive-journal-head" type="button" aria-expanded="true">
+            <b>ORDERS &amp; POSITIONS</b><span>⌄</span>
+          </button>
+          <div class="option-drive-journal-body">
+            <details open>
+              <summary>WORKING <span id="option-drive-working-count">0</span></summary>
+              <div id="option-drive-working" class="option-drive-journal-list"></div>
+            </details>
+            <details open>
+              <summary>POSITIONS <span id="option-drive-positions-count">0</span></summary>
+              <div id="option-drive-positions" class="option-drive-journal-list"></div>
+            </details>
+            <details>
+              <summary>HISTORY <span id="option-drive-history-count">0</span></summary>
+              <div id="option-drive-history" class="option-drive-journal-list"></div>
+            </details>
+          </div>
+        </section>
+          </div>
+        </section>
+      </div>
+    </section>
+    <div id="vertical-splitter" class="splitter vertical" title="Drag to resize chart and panel"></div>
+    <aside class="side-panel">
+      <section class="card">
+        <div class="side-tabs" role="tablist" aria-label="Terminal sidebar">
+          <button id="side-tab-instruments" class="side-tab active" type="button" role="tab" data-side-tab="instruments" title="Instruments" aria-label="Instruments" aria-controls="side-instruments" aria-selected="true" tabindex="0">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          </button>
+          <button id="side-tab-indicators" class="side-tab" type="button" role="tab" data-side-tab="indicators" title="Indicators" aria-label="Indicators" aria-controls="side-indicators" aria-selected="false" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V9M12 21V3M20 21v-7"/></svg>
+          </button>
+          <button id="side-tab-alerts" class="side-tab" type="button" role="tab" data-side-tab="alerts" title="Alerts" aria-label="Alerts" aria-controls="side-alerts" aria-selected="false" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 21h4M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/></svg>
+          </button>
+          <button id="side-tab-go" class="side-tab" type="button" role="tab" data-side-tab="go" title="GO" aria-label="GO" aria-controls="side-go" aria-selected="false" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>
+          </button>
+        </div>
+        <div id="side-instruments" class="side-section" role="tabpanel" aria-labelledby="side-tab-instruments">
+          <div class="section-title watchlist-title">
+            <span>Watchlist</span>
+            <button id="watchlist-edit-toggle" class="watchlist-edit-toggle" type="button" title="Edit watchlist" aria-label="Edit watchlist" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4.4L19.2 9.2a2.35 2.35 0 0 0 0-3.3l-1.1-1.1a2.35 2.35 0 0 0-3.3 0L4 15.6V20Z"/><path d="M13.8 5.8l4.4 4.4"/></svg>
+            </button>
+            <span id="screener-state" role="status" aria-live="polite" data-state="waiting" data-state-kind="loading" aria-busy="true">WAITING</span>
+          </div>
+          <div id="watchlist-edit-hint" class="watchlist-edit-hint" role="status" hidden>EDIT · drag to move · Alt+↑/↓ to reorder</div>
+          <div class="watchlist-add">
+            <select id="watchlist-provider-select" class="settings-control" title="Data provider"></select>
+            <input id="watchlist-symbol-input" class="settings-control" placeholder="Name or symbol" title="Search instrument by provider name or symbol">
+            <button id="watchlist-add-button" class="tool-button" title="Add instrument to watchlist">+</button>
+          </div>
+          <div id="watchlist-search-results" class="watchlist-search-results"></div>
+          <div id="instrument-list" class="watchlist"></div>
+          <div class="indicator-runtime side-instruments-runtime">
+            <div class="section-title">
+              <span>Runtime</span>
+              <span class="runtime-layout-toggle" title="Trade block layout in sidebar">
+                <button id="trade-setup-runtime-layout-full" type="button" class="runtime-layout-btn" title="Full trade block with plan grid">Full</button>
+                <button id="trade-setup-runtime-layout-compact" type="button" class="runtime-layout-btn" title="Compact trade block">Mini</button>
+              </span>
+              <span id="indicator-runtime-summary">waiting</span>
+            </div>
+            <div id="trade-setup-runtime" class="trade-setup-runtime" aria-live="polite"></div>
+            <div id="indicator-runtime-list"></div>
+          </div>
+        </div>
+        <div id="side-indicators" class="side-section hidden" role="tabpanel" aria-labelledby="side-tab-indicators" hidden>
+          <div class="section-title indicator-section-title">
+            <span>Modules</span>
+            <button id="indicator-manager-toggle" type="button" class="indicator-manager-toggle" aria-expanded="false" title="Manage active indicators for this instrument">Manager</button>
+            <span>chart</span>
+          </div>
+          <div id="indicator-manager-panel" class="indicator-manager-panel hidden" aria-label="Indicator manager">
+            <div class="indicator-manager-head">
+              <span>Active set</span>
+              <span id="indicator-manager-count">0 / 0</span>
+            </div>
+            <div id="indicator-manager-diagnostics" class="indicator-manager-diagnostics"></div>
+            <div id="indicator-manager-list" class="indicator-manager-list"></div>
+          </div>
+          <div class="indicator-list">
+            <div class="indicator-row" data-indicator-id="ema_vwap_ny" data-indicator-order="900">
+              <div>
+                <div class="indicator-title">EMA / VWAP / NY range</div>
+                <div class="indicator-note">Global chart guides: EMA trend/magnet lines, VWAP fair price, NY opening range, and prior day reference levels.</div>
+              </div>
+              <div class="indicator-controls">
+                <label class="toggle" title="Master switch for all EMA lines.">
+                  <input id="ema-all-toggle" type="checkbox">
+                  <span>EMA</span>
+                </label>
+                <label class="toggle" title="Show EMA20 pullback line.">
+                  <input id="ema20-toggle" type="checkbox">
+                  <span>20</span>
+                </label>
+                <label class="toggle" title="Show EMA50 trend line.">
+                  <input id="ema50-toggle" type="checkbox">
+                  <span>50</span>
+                </label>
+                <label class="toggle">
+                  <input id="ema233-toggle" type="checkbox">
+                  <span>233</span>
+                </label>
+                <label class="toggle" title="Show VWAP fair-price line.">
+                  <input id="vwap-toggle" type="checkbox">
+                  <span>VWAP</span>
+                </label>
+                <label class="toggle">
+                  <input id="vwap-bands-toggle" type="checkbox">
+                  <span>σ</span>
+                </label>
+                <label class="toggle">
+                  <input id="ny-range-toggle" type="checkbox">
+                  <span>NY</span>
+                </label>
+                <label class="toggle" title="Show NY opening range high, low, and midpoint lines through the provider-confirmed session.">
+                  <input id="ny-range-lines" type="checkbox">
+                  <span>Lines</span>
+                </label>
+                <label class="toggle" title="Show previous day open/close reference lines.">
+                  <input id="prev-day-levels-toggle" type="checkbox">
+                  <span>PD</span>
+                </label>
+                <div class="indicator-control-group indicator-advanced-control">
+                  <div class="indicator-group-title">EMA lines <span>style/width apply to 20, 50, 233</span></div>
+                  <label class="indicator-field" title="Line style for EMA20, EMA50 and EMA233">
+                    <span>EMA style</span>
+                    <select id="ema233-style" class="settings-control">
+                      <option value="solid">Solid</option>
+                      <option value="dashed">Dashed</option>
+                      <option value="dotted">Dotted</option>
+                    </select>
+                  </label>
+                  <label class="indicator-field" title="Line width for EMA20, EMA50 and EMA233">
+                    <span>EMA width</span>
+                    <select id="ema233-width" class="settings-control">
+                      <option value="1">1 px</option>
+                      <option value="2">2 px</option>
+                      <option value="3">3 px</option>
+                      <option value="4">4 px</option>
+                    </select>
+                  </label>
+                  <label class="indicator-field" title="EMA20 color">
+                    <span>EMA20 color</span>
+                    <input id="ema20-color" class="settings-control color-control" type="color">
+                  </label>
+                  <label class="indicator-field" title="EMA50 color">
+                    <span>EMA50 color</span>
+                    <input id="ema50-color" class="settings-control color-control" type="color">
+                  </label>
+                  <label class="indicator-field" title="EMA233 color">
+                    <span>EMA233 color</span>
+                    <input id="ema233-color" class="settings-control color-control" type="color">
+                  </label>
+                  <label class="indicator-field" title="EMA 233 touch alert auto-rearm interval">
+                    <span>EMA233 alert</span>
+                    <select id="ema233-alert-rearm" class="settings-control">
+                      <option value="15">15m rearm</option>
+                      <option value="30">30m rearm</option>
+                      <option value="60">60m rearm</option>
+                    </select>
+                  </label>
+                  <button id="alert-add-ema233" class="tool-button" title="Add a dynamic alert when price touches EMA 233 with a small tolerance">Alert</button>
+                </div>
+                <div class="indicator-control-group indicator-advanced-control">
+                  <div class="indicator-group-title">VWAP line <span>style/width apply to VWAP only</span></div>
+                  <label class="indicator-field" title="Line style for central VWAP">
+                    <span>VWAP style</span>
+                    <select id="vwap-style" class="settings-control">
+                      <option value="solid">Solid</option>
+                      <option value="dashed">Dashed</option>
+                      <option value="dotted">Dotted</option>
+                    </select>
+                  </label>
+                  <label class="indicator-field" title="Line width for central VWAP">
+                    <span>VWAP width</span>
+                    <select id="vwap-width" class="settings-control">
+                      <option value="1">1 px</option>
+                      <option value="2">2 px</option>
+                      <option value="3">3 px</option>
+                    </select>
+                  </label>
+                  <label class="indicator-field" title="VWAP color">
+                    <span>VWAP color</span>
+                    <input id="vwap-color" class="settings-control color-control" type="color">
+                  </label>
+                </div>
+                <div class="indicator-control-group indicator-advanced-control">
+                  <div class="indicator-group-title">VWAP σ bands <span>count and band color</span></div>
+                  <label class="indicator-field" title="How many VWAP sigma bands to draw">
+                    <span>Band count</span>
+                    <select id="vwap-band-count" class="settings-control">
+                      <option value="1">1σ</option>
+                      <option value="2">2σ</option>
+                      <option value="3">3σ</option>
+                    </select>
+                  </label>
+                  <label class="indicator-field" title="VWAP sigma band color">
+                    <span>Band color</span>
+                    <input id="vwap-band-color" class="settings-control color-control" type="color">
+                  </label>
+                </div>
+                <div class="indicator-control-group indicator-advanced-control">
+                  <div class="indicator-group-title">NY range <span>global box style</span></div>
+                  <label class="indicator-field" title="NY opening range box opacity">
+                    <span>Opacity</span>
+                    <select id="ny-range-opacity" class="settings-control">
+                      <option value="8">8%</option>
+                      <option value="14">14%</option>
+                      <option value="20">20%</option>
+                      <option value="28">28%</option>
+                    </select>
+                  </label>
+                  <label class="indicator-field" title="NY opening range line style">
+                    <span>Line style</span>
+                    <select id="ny-range-style" class="settings-control">
+                      <option value="dotted">Dotted</option>
+                      <option value="dashed">Dashed</option>
+                      <option value="solid">Solid</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="indicator-row indicator-row-terminal" data-terminal-settings-id="vsa_volume" data-indicator-order="901">
+              <div>
+                <div class="indicator-title">VSA Volume</div>
+                <div class="indicator-note">Terminal VSA detection is always active. These controls affect chart presentation only.</div>
+              </div>
+              <div class="indicator-controls">
+                <label class="toggle">
+                  <input id="vsa-volume-toggle" type="checkbox">
+                  <span>Show</span>
+                </label>
+                <label class="toggle">
+                  <input id="vsa-volume-avg" type="checkbox">
+                  <span>Avg</span>
+                </label>
+                <label class="toggle">
+                  <input id="vsa-volume-labels" type="checkbox">
+                  <span>Labels</span>
+                </label>
+                <label class="toggle">
+                  <input id="vsa-volume-price-marks" type="checkbox">
+                  <span title="Text candle-type marks on the price chart.">Text</span>
+                </label>
+                <label class="toggle">
+                  <input id="vsa-volume-candle-colors" type="checkbox">
+                  <span>Candles</span>
+                </label>
+                <label class="toggle">
+                  <input id="vsa-volume-volume-colors" type="checkbox">
+                  <span>Vol</span>
+                </label>
+                <label class="indicator-field" title="Visible VSA candle, volume, and label history">
+                  <span>History</span>
+                  <select id="vsa-volume-render-hours" class="settings-control">
+                    <option value="2">2h</option>
+                    <option value="4">4h</option>
+                    <option value="6">6h</option>
+                    <option value="12">12h</option>
+                  </select>
+                </label>
+                <button id="alert-add-vsa-fuel" class="tool-button indicator-advanced-control" title="Add an alert for new VSA fuel candles">Fuel Alert</button>
+                <div id="vsa-volume-color-legend" class="vsa-color-legend indicator-control-group indicator-advanced-control" aria-label="VSA candle color reference"></div>
+              </div>
+            </div>
+            <div class="indicator-row" data-indicator-id="option_points" data-indicator-order="-100" data-indicator-order-lock="top">
+              <div>
+                <div class="indicator-title">Option Points</div>
+                <div class="indicator-note">Database-backed option helper points with fixed contract repricing.</div>
+              </div>
+              <div class="indicator-controls">
+                <label class="toggle" data-compact-control="1">
+                  <input id="option-targets-toggle" type="checkbox">
+                  <span>Show</span>
+                </label>
+                <label class="toggle" title="Pulse active option helper dots.">
+                  <input id="option-targets-pulse" type="checkbox">
+                  <span>Pulse</span>
+                </label>
+                <label class="toggle" title="Show live Option Reversal action and quality below each Option Point.">
+                  <input id="option-targets-fast-status" type="checkbox">
+                  <span>Signal</span>
+                </label>
+                <label class="indicator-field option-point-cap-field indicator-advanced-control" title="Maximum option premium allowed when pricing option points for the current provider-qualified instrument">
+                  <span>Premium cap · <b id="option-cap-instrument">Current instrument</b></span>
+                  <input id="option-cap-current" class="settings-control tiny" type="number" min="0.01" max="999" step="0.05" placeholder="Required" aria-label="Current instrument option premium cap">
+                </label>
+                <div id="option-target-active-list" class="option-target-active-list" data-compact-control="1"></div>
+              </div>
+            </div>
+            <div class="indicator-row" data-indicator-id="global_defaults" data-indicator-order="902">
+              <div>
+                <div class="indicator-title">Global defaults</div>
+                <div class="indicator-note">Shared ATR, RVOL, EMA and signal thresholds used as default tuning for indicator calculations.</div>
+              </div>
+              <div class="indicator-controls">
+                <label class="toggle" title="Reduce score sensitivity during low-activity sessions when indicators support session dampening.">
+                  <input id="global-session-dampening" type="checkbox">
+                  <span>Session</span>
+                </label>
+                <select id="global-default-preset" class="settings-control" title="Apply a global indicator tuning preset">
+                  <option value="balanced">Balanced</option>
+                  <option value="scalp">Scalp</option>
+                  <option value="conservative">Conservative</option>
+                  <option value="research">Research</option>
+                </select>
+                <label class="indicator-field" title="Shared ATR period for indicators that use the global default">
+                  <span>ATR</span>
+                  <input id="global-atr-len" class="settings-control tiny" type="number" min="2" max="100" step="1">
+                </label>
+                <label class="indicator-field" title="Shared relative-volume lookback">
+                  <span>RVOL</span>
+                  <input id="global-rvol-len" class="settings-control tiny" type="number" min="2" max="200" step="1">
+                </label>
+                <label class="indicator-field" title="EMA pullback guide used by pullback-oriented modules">
+                  <span>EMA PB</span>
+                  <input id="global-ema-pullback" class="settings-control tiny" type="number" min="5" max="300" step="1">
+                </label>
+                <label class="indicator-field" title="Fast trend EMA used by shared trend guides">
+                  <span>EMA fast</span>
+                  <input id="global-ema-fast" class="settings-control tiny" type="number" min="5" max="300" step="1">
+                </label>
+                <label class="indicator-field" title="Slow trend EMA used by shared trend guides">
+                  <span>EMA slow</span>
+                  <input id="global-ema-slow" class="settings-control tiny" type="number" min="10" max="400" step="1">
+                </label>
+                <label class="indicator-field" title="Magnet EMA used by regime and mean-reversion context">
+                  <span>EMA mag</span>
+                  <input id="global-ema-magnet" class="settings-control tiny" type="number" min="50" max="1000" step="1">
+                </label>
+                <label class="indicator-field" title="PRE signal score threshold">
+                  <span>PRE</span>
+                  <input id="global-score-pre" class="settings-control tiny" type="number" min="0" max="99" step="1">
+                </label>
+                <label class="indicator-field" title="WATCH signal score threshold">
+                  <span>WATCH</span>
+                  <input id="global-score-watch" class="settings-control tiny" type="number" min="0" max="99" step="1">
+                </label>
+                <label class="indicator-field" title="ARM signal score threshold">
+                  <span>ARM</span>
+                  <input id="global-score-arm" class="settings-control tiny" type="number" min="0" max="99" step="1">
+                </label>
+                <label class="indicator-field" title="GO signal score threshold">
+                  <span>GO</span>
+                  <input id="global-score-go" class="settings-control tiny" type="number" min="0" max="99" step="1">
+                </label>
+                <label class="indicator-field" title="Low RVOL threshold">
+                  <span>RVOL low</span>
+                  <input id="global-rvol-low" class="settings-control tiny" type="number" min="0" max="5" step="0.05">
+                </label>
+                <label class="indicator-field" title="Elevated RVOL threshold">
+                  <span>RVOL +</span>
+                  <input id="global-rvol-elevated" class="settings-control tiny" type="number" min="0" max="5" step="0.05">
+                </label>
+                <label class="indicator-field" title="High RVOL threshold">
+                  <span>RVOL high</span>
+                  <input id="global-rvol-high" class="settings-control tiny" type="number" min="0" max="5" step="0.05">
+                </label>
+                <label class="indicator-field" title="Climactic RVOL threshold">
+                  <span>RVOL clim</span>
+                  <input id="global-rvol-climax" class="settings-control tiny" type="number" min="0" max="10" step="0.05">
+                </label>
+                <label class="indicator-field" title="Score multiplier for low-activity/session dampening">
+                  <span>Low act</span>
+                  <input id="global-low-activity-score-multiplier" class="settings-control tiny" type="number" min="0.2" max="1.2" step="0.05">
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="side-alerts" class="side-section hidden" role="tabpanel" aria-labelledby="side-tab-alerts" hidden>
+          <div class="alert-manager">
+            <div class="section-title">
+              <span>Price Alerts</span>
+              <span>
+                <button id="alert-delete-all" class="tool-button" title="Delete all price alerts for this symbol/timeframe">Clear</button>
+              </span>
+            </div>
+            <div id="price-alert-list" class="alert-list"></div>
+          </div>
+        </div>
+        <div id="side-go" class="side-section hidden" role="tabpanel" aria-labelledby="side-tab-go" hidden>
+          <section class="card trade-mode-card">
+            <div class="trade-mode-header">
+              <button id="paper-trade-toggle" class="trade-mode-head" type="button" title="Paper trading mode; no broker orders are sent">
+                <span>Trade Mode</span>
+                <b id="paper-trade-mode-status">PAPER</b>
+              </button>
+              <label class="paper-chart-toggle" title="Show paper positions and fills on the chart">
+                <input id="paper-show-trades-on-chart" type="checkbox" checked>
+                <span>show tr</span>
+              </label>
+              <label class="paper-chart-toggle" title="Automatic paper entries from Trade Center GO signals">
+                <input id="paper-auto-trading-toggle" type="checkbox">
+                <span>auto</span>
+              </label>
+            </div>
+            <div id="paper-account-summary" class="paper-account-row paper-account-row-top">
+              <b>$20000.00</b><span>Realized 0.00 · Base 20000.00</span>
+            </div>
+            <div id="paper-trade-panel" class="trade-mode-panel">
+              <div class="trade-mode-actions">
+                <button id="paper-trade-buy" class="paper-side long" type="button" title="Arm buy cursor">Buy</button>
+                <button id="paper-trade-sell" class="paper-side short" type="button" title="Arm sell cursor">Sell</button>
+              </div>
+              <div id="paper-execution-eligibility" class="execution-eligibility" role="status" aria-live="polite" data-state="blocked" data-state-kind="error">
+                <strong class="execution-eligibility-action bad">ACTION BLOCKED</strong>
+                <span class="execution-eligibility-fact bad">ROUTE BLOCKED</span>
+                <span class="execution-eligibility-fact muted">QUOTE NO DATA</span>
+                <span class="execution-eligibility-fact warn">SESSION UNKNOWN</span>
+              </div>
+              <div class="trade-mode-grid">
+                <label><span>Type</span><select id="paper-order-type" class="settings-control"><option value="limit">Limit</option><option value="market">Market</option><option value="stop">Stop</option></select></label>
+                <label><span>Qty</span><input id="paper-order-qty" class="settings-control" type="number" min="0.1" max="100" step="0.1" value="1"></label>
+                <label><span><input id="paper-order-use-stop" type="checkbox" checked> SL pts</span><input id="paper-order-stop-points" class="settings-control" type="number" min="0.01" max="500" step="0.25" value="8"></label>
+                <label><span><input id="paper-order-use-target" type="checkbox" checked> TP pts</span><input id="paper-order-target-points" class="settings-control" type="number" min="0.01" max="1000" step="0.25" value="16"></label>
+              </div>
+              <div class="trade-mode-foot">
+                <span id="paper-trade-status">Select BUY or SELL, then click a price on the chart.</span>
+                <button id="paper-trade-cancel-arm" class="tool-button" type="button" title="Cancel armed cursor">Clear</button>
+              </div>
+            </div>
+          </section>
+            <section class="card paper-journal-card">
+            <div class="paper-journal-head">
+              <b>Positions</b>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <button id="paper-journal-open" class="tool-button" type="button" title="Open trade journal table">Table</button>
+                <button id="paper-journal-csv" class="tool-button" type="button" title="Download trade journal CSV">CSV</button>
+                <span id="paper-trades-count">0</span>
+              </div>
+            </div>
+            <div id="paper-trades-list" class="paper-journal-list"></div>
+          </section>
+          <section class="card paper-journal-card">
+            <div class="paper-journal-head"><b>Orders</b><span id="paper-orders-count">0</span></div>
+            <div id="paper-orders-list" class="paper-journal-list"></div>
+          </section>
+          <section class="card paper-journal-card">
+            <div class="paper-journal-head"><b>Fills</b><span id="paper-fills-count">0</span></div>
+            <div id="paper-fills-list" class="paper-journal-list"></div>
+          </section>
+          <section class="decision">
+            <strong id="action">WAIT</strong>
+            <div>
+              <span id="side" class="pill">flat</span>
+              <span id="kind" class="pill">wait</span>
+              <span id="confidence" class="pill">0</span>
+            </div>
+          </section>
+          <section class="grid">
+            <div class="metric"><span>Trigger</span><b id="trigger">-</b></div>
+            <div class="metric"><span>Stop</span><b id="stop">-</b></div>
+            <div class="metric"><span>Target</span><b id="target">-</b></div>
+            <div class="metric"><span>ATR</span><b id="atr">-</b></div>
+          </section>
+          <section class="card">
+            <b>Trade Setup</b>
+            <div id="trade-setup-panel" class="trade-setup-panel"></div>
+          </section>
+        </div>
+      </section>
+    </aside>
+  </main>
+  <section id="settings-panel" class="settings-panel" role="dialog" aria-modal="false" aria-label="Settings" aria-hidden="true" tabindex="-1">
+    <div class="settings-head" data-floating-panel-handle title="Drag to move settings window">
+      <span>Settings</span>
+      <button id="settings-save-state" class="settings-save-state saved" type="button" title="Settings are saved">Saved</button>
+      <button id="settings-close" class="tool-button" title="Close settings" aria-label="Close settings">×</button>
+    </div>
+    <details id="settings-interface-group" class="settings-group" open>
+      <summary class="settings-group-summary">
+        <span class="settings-group-copy">
+          <span class="settings-group-title">Interface &amp; Chart</span>
+          <span class="settings-group-description">Appearance, layout, and market overlays</span>
+        </span>
+        <span id="settings-interface-summary" class="settings-group-value">Interface</span>
+      </summary>
+      <div class="settings-group-body">
+        <div class="settings-row">
+          <span>UI style</span>
+          <select id="ui-shape-select" class="settings-control" title="Rounded corners or flat straight edges" aria-label="UI style">
+            <option value="rounded">Rounded</option>
+            <option value="flat">Flat</option>
+            <option value="tv-flat">TV Flat</option>
+            <option value="tv-black">TV Black</option>
+            <option value="tv-black-flat">TV Black Flat</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <span>Workspace dock side</span>
+          <select id="workspace-dock-side" class="settings-control" aria-label="Workspace dock side">
+            <option value="left">Left of chart</option>
+            <option value="right" selected>Right of chart</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label for="workspace-dock-width">Workspace dock width</label>
+          <output id="workspace-dock-width-value" for="workspace-dock-width">300 px</output>
+          <input id="workspace-dock-width" class="settings-control" type="range" min="220" max="640" step="1" value="300">
+        </div>
+        <div class="settings-row">
+          <span>GEX sidebar location</span>
+          <select id="gex-sidebar-placement" class="settings-control" aria-label="GEX sidebar location">
+            <option value="chart">Inside price chart</option>
+            <option value="dock">Workspace dock · GEX tab</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <span>View preset</span>
+          <select id="view-preset-select" class="settings-control" title="Switch chart, alert, and compact mobile layouts" aria-label="View preset">
+            <option value="trading">Trading</option>
+            <option value="alerts">Alerts</option>
+            <option value="mobile">Mobile</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <span>Health visualizer</span>
+          <select id="health-visualizer-select" class="settings-control" title="Live health indicator next to the instrument name." aria-label="Health visualizer">
+            <option value="candles">Candles</option>
+            <option value="snake">Snake</option>
+            <option value="off">Off</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <span>Motion</span>
+          <select id="motion-preference-select" class="settings-control" title="Use system motion preference, reduce motion, or disable decorative motion" aria-label="Motion preference">
+            <option value="system">System</option>
+            <option value="reduced">Reduced</option>
+            <option value="off">Off</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <span>Horizontal grid</span>
+          <label class="toggle">
+            <input id="horizontal-grid-toggle" type="checkbox" aria-label="Show horizontal grid">
+            <span>Show</span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <span>Vertical grid</span>
+          <label class="toggle">
+            <input id="vertical-grid-toggle" type="checkbox" aria-label="Show vertical grid">
+            <span>Show</span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <span>Candle grid</span>
+          <label class="toggle">
+            <input id="candle-grid-toggle" type="checkbox" aria-label="Show candle grid">
+            <span>Show</span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <span>Bid / ask on candle</span>
+          <label class="toggle" title="Show live broker bid and ask markers near the current candle.">
+            <input id="bid-ask-candle-toggle" type="checkbox" aria-label="Show bid and ask on the current candle">
+            <span>Show</span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <span>Economic events</span>
+          <label class="toggle" title="Show important US macro and Federal Reserve events on the volume chart.">
+            <input id="economic-calendar-toggle" type="checkbox" aria-label="Show economic events on the volume chart">
+            <span>Show</span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <span>Price sessions</span>
+          <input id="session-price-opacity" class="settings-control" type="range" min="0" max="8" step="1" aria-label="Price session shading opacity" aria-describedby="session-price-opacity-label" aria-valuetext="1%">
+          <output id="session-price-opacity-label" class="muted" for="session-price-opacity">1%</output>
+        </div>
+        <div class="settings-row">
+          <span>Volume sessions</span>
+          <input id="session-volume-opacity" class="settings-control" type="range" min="0" max="10" step="1" aria-label="Volume session shading opacity" aria-describedby="session-volume-opacity-label" aria-valuetext="3%">
+          <output id="session-volume-opacity-label" class="muted" for="session-volume-opacity">3%</output>
+        </div>
+      </div>
+    </details>
+    <details id="settings-signals-group" class="settings-group" open>
+      <summary class="settings-group-summary">
+        <span class="settings-group-copy">
+          <span class="settings-group-title">Signals &amp; Analysis</span>
+          <span class="settings-group-description">Calculation horizon and chart presentation</span>
+        </span>
+        <span id="settings-signals-summary" class="settings-group-value">Signals</span>
+      </summary>
+      <div class="settings-group-body">
+        <div class="settings-subsection-label">Calculation</div>
+        <div class="settings-row">
+          <span>Strategy mode</span>
+          <select id="strategy-mode-select" class="settings-control" title="Bias candidate ranking toward fade, breakout, or balanced mix" aria-label="Strategy mode">
+            <option value="balanced">Balanced</option>
+            <option value="mean_reversion">Mean Reversion</option>
+            <option value="breakout">Breakout</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <span>Signals range</span>
+          <select id="signals-range-select" class="settings-control" title="History window used for signal calculations and chart signal marks" aria-label="Signals range">
+            <option value="1d">1 day</option>
+            <option value="2d" selected>2 days</option>
+            <option value="3d">3 days</option>
+            <option value="7d">7 days</option>
+          </select>
+        </div>
+        <div class="settings-subsection-label">Chart presentation</div>
+        <div class="settings-row">
+          <span>Signal density</span>
+          <select id="signal-density-select" class="settings-control" title="Minimal: command-tier signal labels only; persistent overlays remain. Focus: latest typed signal from each indicator plus the current or active plan. Research: full signal and lifecycle history." aria-label="Signal density">
+            <option value="focus">Focus</option>
+            <option value="research">Research</option>
+            <option value="minimal">Minimal</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <span>Label style</span>
+          <select id="indicator-label-style-select" class="settings-control" title="Indicator label renderer style" aria-label="Indicator label style">
+            <option value="text">Text</option>
+            <option value="box">Box</option>
+          </select>
+        </div>
+      </div>
+    </details>
+    <details id="settings-paper-group" class="settings-group">
+      <summary class="settings-group-summary">
+        <span class="settings-group-copy">
+          <span class="settings-group-title">Paper Trading</span>
+          <span class="settings-group-description">Entry gates and research behavior</span>
+        </span>
+        <span id="settings-paper-summary" class="settings-group-value">Paper</span>
+      </summary>
+      <div class="settings-group-body">
+        <div class="settings-row">
+          <span>Signal min R:R</span>
+          <select id="paper-min-rr-select" class="settings-control" title="Minimum planned reward/risk ratio for executable signals and paper journal entries" aria-label="Minimum paper signal reward to risk ratio">
+            <option value="0.75">0.75</option>
+            <option value="1.25">1.25</option>
+            <option value="1.5">1.50</option>
+            <option value="2">2.00</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <span>Paper edge gate</span>
+          <label class="toggle" title="Block paper entries that match negative source/side/UTC-daypart edge rules from the latest backtest assessment.">
+            <input id="paper-edge-gate-toggle" type="checkbox" aria-label="Block paper entries with a negative tested edge">
+            <span>Block</span>
+          </label>
+        </div>
+      </div>
+    </details>
+    <details id="settings-notifications-group" class="settings-group">
+      <summary class="settings-group-summary">
+        <span class="settings-group-copy">
+          <span class="settings-group-title">Notifications</span>
+          <span class="settings-group-description">Telegram service and paper activity</span>
+        </span>
+        <span class="settings-group-value">Telegram</span>
+      </summary>
+      <div class="settings-group-body settings-group-body-card">
+        <div class="telegram-settings-group">
+          <div class="telegram-settings-row">
+            <div class="telegram-settings-copy">
+              <b>Notifications</b>
+              <div id="telegram-alert-status" class="health-status">Telegram status unknown</div>
+            </div>
+            <button id="telegram-alert-test-health" class="tool-button" type="button" title="Send Telegram backend test notification">Test</button>
+          </div>
+          <div class="telegram-settings-row">
+            <div class="telegram-settings-copy">
+              <b>Command bot</b>
+              <div id="telegram-interactive-status" class="health-status">Telegram bot status unknown</div>
+            </div>
+            <label class="toggle" title="Set Telegram bot token and chat id first">
+              <input id="telegram-interactive-toggle" type="checkbox" aria-label="Enable interactive Telegram command bot" disabled>
+              <span>Interactive</span>
+            </label>
+          </div>
+          <div class="telegram-settings-row">
+            <div class="telegram-settings-copy">
+              <b>Paper trades</b>
+              <div class="health-status">Silent open/close notifications</div>
+            </div>
+            <label class="toggle" title="Send paper trade open/close messages to Telegram silently. Price alerts are controlled separately.">
+              <input id="paper-telegram-feed-toggle" type="checkbox" aria-label="Send silent paper trade notifications to Telegram">
+              <span>Silent</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details id="settings-diagnostics-group" class="settings-group">
+      <summary class="settings-group-summary">
+        <span class="settings-group-copy">
+          <span class="settings-group-title">Diagnostics</span>
+          <span class="settings-group-description">Runtime, provider, and storage health</span>
+        </span>
+        <span class="settings-group-value">System</span>
+      </summary>
+      <div class="settings-group-body settings-group-body-card">
+        <div class="health-diagnostics-request">
+          <button id="system-diagnostics-request" class="tool-button" type="button" aria-describedby="system-diagnostics-status">Request DB diagnostics</button>
+          <span id="system-diagnostics-status" class="health-status" role="status">Detailed PostgreSQL statistics load only on request.</span>
+        </div>
+        <div id="system-health" class="health-dashboard">
+          <div class="health-card"><span>Backend</span><b>loading</b></div>
+          <div class="health-card"><span>Database</span><b>loading</b></div>
+          <div class="health-card"><span>Rows</span><b>-</b></div>
+          <div class="health-card"><span>Memory</span><b>-</b></div>
+        </div>
+        <div id="system-health-time" class="health-checked muted">Not checked yet</div>
+      </div>
+    </details>
+  </section>
+  <section id="option-board-dialog" class="option-board-panel" role="dialog" aria-modal="false" aria-labelledby="option-board-title">
+    <div class="modal-card option-board-card">
+      <div class="modal-head" data-floating-panel-handle title="Drag to move live option prices">
+        <div class="option-board-heading">
+          <b id="option-board-title">Option Prices</b>
+          <span id="option-board-subtitle" class="muted">Open the board to subscribe</span>
+        </div>
+        <button id="option-board-close" class="tool-button" type="button" title="Close live option prices" aria-label="Close live option prices">×</button>
+      </div>
+      <div class="option-board-summary">
+        <span id="option-board-status" class="quality-badge">CLOSED</span>
+        <span id="option-board-spot" class="muted">Spot —</span>
+        <span id="option-board-entitlement" class="muted">Data —</span>
+        <span id="option-board-updated" class="muted">Updated —</span>
+      </div>
+      <div class="modal-body option-board-body">
+        <div id="option-board-message" class="option-board-message muted">No option subscriptions are active.</div>
+        <div class="option-board-table-scroll">
+          <table class="option-board-table" aria-label="Live option prices">
+            <thead>
+              <tr>
+                <th colspan="4" class="option-board-call-head">CALL</th>
+                <th rowspan="2" class="option-board-strike-head">Strike</th>
+                <th colspan="4" class="option-board-put-head">PUT</th>
+              </tr>
+              <tr>
+                <th>Last</th>
+                <th>Bid</th>
+                <th>Ask</th>
+                <th>Mid</th>
+                <th>Mid</th>
+                <th>Bid</th>
+                <th>Ask</th>
+                <th>Last</th>
+              </tr>
+            </thead>
+            <tbody id="option-board-rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="drawing-dialog" class="modal" role="dialog" aria-modal="true" aria-labelledby="drawing-dialog-title">
+    <div class="modal-card">
+      <div class="modal-head" data-floating-panel-handle title="Drag to move drawing objects window">
+        <b id="drawing-dialog-title">Drawing Objects</b>
+        <button id="drawing-dialog-close" class="tool-button" type="button" title="Close object manager" aria-label="Close object manager">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="drawing-object-tabs" class="object-tabs" aria-label="Drawing object type filter"></div>
+        <div id="drawing-object-list" class="object-list"></div>
+        <div id="drawing-object-properties" class="object-properties" hidden>
+          <div class="settings-row">
+            <span>Selected object</span>
+            <b id="object-selected-label" class="muted">None</b>
+          </div>
+          <form id="object-text-editor" class="object-text-editor" data-object-types="text" hidden>
+            <label for="object-text-input">Label text</label>
+            <textarea id="object-text-input" rows="4" spellcheck="true" placeholder="Enter chart label text"></textarea>
+            <div class="object-text-editor-foot">
+              <span><kbd>Enter</kbd> save · <kbd>Shift+Enter</kbd> new line</span>
+              <div>
+                <button id="object-text-cancel" class="tool-button" type="button">Cancel</button>
+                <button id="object-text-save" class="tool-button active" type="submit">Save</button>
+              </div>
+            </div>
+          </form>
+          <div class="settings-row" data-object-types="line channel fib">
+            <span>Extend right</span>
+            <label class="toggle">
+              <input id="object-extend-right" type="checkbox">
+              <span>On</span>
+            </label>
+          </div>
+          <div class="settings-row" data-object-types="line channel fib path">
+            <span>Object line</span>
+            <select id="object-style" class="settings-control">
+              <option value="solid">Solid</option>
+              <option value="dashed">Dashed</option>
+              <option value="dotted">Dotted</option>
+            </select>
+          </div>
+          <div class="settings-row" data-object-types="line channel fib ellipse path">
+            <span>Object width</span>
+            <select id="object-width" class="settings-control">
+              <option value="1">1 px</option>
+              <option value="2">2 px</option>
+              <option value="3">3 px</option>
+              <option value="4">4 px</option>
+            </select>
+          </div>
+          <div class="settings-row" data-object-types="line channel fib text ellipse path">
+            <span>Object color</span>
+            <input id="object-color" class="settings-control color-control" type="color" title="Selected object color">
+          </div>
+          <div class="settings-row" data-object-types="channel">
+            <span>Channel quarters</span>
+            <label class="toggle">
+              <input id="object-channel-guides" type="checkbox">
+              <span>Show</span>
+            </label>
+          </div>
+          <div class="settings-row" data-object-types="channel">
+            <span>Ghost channels</span>
+            <select id="object-ghost-copies" class="settings-control">
+              <option value="0">Off</option>
+              <option value="1">1 copy</option>
+              <option value="2">2 copies</option>
+              <option value="3">3 copies</option>
+              <option value="4">4 copies</option>
+              <option value="5">5 copies</option>
+              <option value="6">6 copies</option>
+              <option value="7">7 copies</option>
+              <option value="8">8 copies</option>
+              <option value="9">9 copies</option>
+              <option value="10">10 copies</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="drawing-delete-checked" class="tool-button" title="Delete checked objects">Delete checked</button>
+        <button id="drawing-delete-all" class="tool-button" title="Delete all objects for this symbol/timeframe">Delete all</button>
+      </div>
+    </div>
+  </section>
+  <section id="command-palette" class="command-palette" role="dialog" aria-modal="true" aria-labelledby="command-palette-title" hidden>
+    <div class="command-palette-card">
+      <div class="command-palette-head">
+        <label id="command-palette-title" for="command-palette-input">Command Palette</label>
+        <kbd>⌘K / Ctrl K</kbd>
+      </div>
+      <input
+        id="command-palette-input"
+        class="command-palette-input"
+        type="search"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-controls="command-palette-results"
+        aria-expanded="false"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Instrument, timeframe, panel or view…"
+      >
+      <div id="command-palette-results" class="command-palette-results" role="listbox" aria-label="Available commands"></div>
+      <div class="command-palette-foot">
+        <span id="command-palette-status" role="status" aria-live="polite"></span>
+        <span><kbd>↑↓</kbd> Navigate <kbd>↵</kbd> Run <kbd>Esc</kbd> Close</span>
+      </div>
+    </div>
+  </section>
+  <div id="chart-context-menu" class="context-menu" role="menu"></div>
+  <div id="canvas-tooltip" class="canvas-tooltip" role="tooltip"></div>
+  <div id="status-tooltip" class="status-tooltip"></div>
+  <div id="browser-toast" class="browser-toast" role="status" aria-live="polite"></div>
+</body>
+</html>

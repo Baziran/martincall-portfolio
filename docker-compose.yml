@@ -1,0 +1,240 @@
+services:
+  martincall-timescaledb:
+    image: timescale/timescaledb:latest-pg16@sha256:87f39af0a38cb42e4add367d9dfad2087a53fe5c9b24b5bc0dc66bd204b0665f
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    #container_name: martincall-timescaledb
+    mem_limit: ${MARTINCALL_DB_MEMORY:-1536mb}
+    cpus: ${MARTINCALL_DB_CPUS:-2.0}
+    shm_size: ${MARTINCALL_DB_SHM:-256mb}
+    command:
+      - postgres
+      - -c
+      - shared_preload_libraries=timescaledb,pg_stat_statements
+      - -c
+      - track_io_timing=on
+      - -c
+      - pg_stat_statements.track=all
+      - -c
+      - pg_stat_statements.max=10000
+      - -c
+      - shared_buffers=256MB
+      - -c
+      - work_mem=8MB
+      - -c
+      - maintenance_work_mem=64MB
+      - -c
+      - effective_cache_size=768MB
+      - -c
+      - max_parallel_workers_per_gather=2
+      - -c
+      - max_parallel_workers=4
+      - -c
+      - max_worker_processes=8
+      - -c
+      - timescaledb.max_background_workers=4
+      - -c
+      - wal_buffers=32MB
+      - -c
+      - max_wal_size=1GB
+      - -c
+      - min_wal_size=128MB
+      - -c
+      - checkpoint_timeout=15min
+      - -c
+      - checkpoint_completion_target=0.9
+      - -c
+      - effective_io_concurrency=200
+      - -c
+      - random_page_cost=1.1
+      - -c
+      - default_statistics_target=200
+    environment:
+      POSTGRES_DB: ${MARTINCALL_POSTGRES_DB:-martincall}
+      POSTGRES_USER: ${MARTINCALL_POSTGRES_USER:-martincall}
+      POSTGRES_PASSWORD: ${MARTINCALL_POSTGRES_PASSWORD:?MARTINCALL_POSTGRES_PASSWORD must be set}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - martincall-timescale-data:/var/lib/postgresql/data
+    networks:
+      - martincall-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  martincall-app:
+    profiles: ["runtime"]
+    image: martincall-app:${MARTINCALL_APP_IMAGE_TAG:-local}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_GIT_SHA: ${BUILD_GIT_SHA:-}
+        BUILD_DATE: ${BUILD_DATE:-}
+        BUILD_VERSION: ${BUILD_VERSION:-}
+    #container_name: martincall-app
+    mem_limit: 1g
+    environment:
+      AEF_DATABASE_URL: postgresql://${MARTINCALL_POSTGRES_USER:-martincall}:${MARTINCALL_POSTGRES_PASSWORD:?MARTINCALL_POSTGRES_PASSWORD must be set}@martincall-timescaledb:5432/${MARTINCALL_POSTGRES_DB:-martincall}
+      AEF_IBKR_HOST: ${AEF_IBKR_HOST:-host.docker.internal}
+      AEF_IBKR_PORT: ${AEF_IBKR_PORT:-7497}
+      AEF_IBKR_CLIENT_ID: ${AEF_IBKR_CLIENT_ID:-17}
+      AEF_IBKR_MARKET_DATA_TYPE: ${AEF_IBKR_MARKET_DATA_TYPE:-1}
+      AEF_IBKR_QUOTE_CLIENT_ID: ${AEF_IBKR_QUOTE_CLIENT_ID:-1017}
+      AEF_IBKR_CHART_CLIENT_ID: ${AEF_IBKR_CHART_CLIENT_ID:-2017}
+      AEF_IBKR_GEX_HOST: ${AEF_IBKR_GEX_HOST:-host.docker.internal}
+      AEF_IBKR_GEX_PORT: ${AEF_IBKR_GEX_PORT:-7497}
+      AEF_IBKR_GEX_CLIENT_ID: ${AEF_IBKR_GEX_CLIENT_ID:-3017}
+      AEF_IBKR_GEX_LIVE_CLIENT_ID: ${AEF_IBKR_GEX_LIVE_CLIENT_ID:-3117}
+      AEF_IBKR_GEX_MARKET_DATA_TYPE: ${AEF_IBKR_GEX_MARKET_DATA_TYPE:-3}
+      AEF_IBKR_GEX_BATCH_SIZE: ${AEF_IBKR_GEX_BATCH_SIZE:-8}
+      AEF_IBKR_GEX_WAIT_SECONDS: ${AEF_IBKR_GEX_WAIT_SECONDS:-2.0}
+      AEF_IBKR_GEX_BATCH_PAUSE_SECONDS: ${AEF_IBKR_GEX_BATCH_PAUSE_SECONDS:-0.25}
+      AEF_IBKR_GEX_TIMEOUT_SECONDS: ${AEF_IBKR_GEX_TIMEOUT_SECONDS:-65.0}
+      AEF_IBKR_TICK_CLIENT_ID: ${AEF_IBKR_TICK_CLIENT_ID:-4017}
+      AEF_IBKR_CONTRACT_CACHE_SIZE: ${AEF_IBKR_CONTRACT_CACHE_SIZE:-256}
+      AEF_IBKR_READONLY: ${AEF_IBKR_READONLY:-true}
+      AEF_MARKET_ANALYSIS_WORKERS: ${AEF_MARKET_ANALYSIS_WORKERS:-1}
+      AEF_CLOSED_SESSION_MAINTENANCE_ENABLED: ${AEF_CLOSED_SESSION_MAINTENANCE_ENABLED:-true}
+      AEF_CLOSED_SESSION_MAINTENANCE_TIMEZONE: ${AEF_CLOSED_SESSION_MAINTENANCE_TIMEZONE:-Asia/Jerusalem}
+      AEF_CLOSED_SESSION_MAINTENANCE_START_LOCAL: ${AEF_CLOSED_SESSION_MAINTENANCE_START_LOCAL:-00:05}
+      AEF_CLOSED_SESSION_MAINTENANCE_END_LOCAL: ${AEF_CLOSED_SESSION_MAINTENANCE_END_LOCAL:-01:00}
+      AEF_CLOSED_SESSION_MAINTENANCE_ACTIVE_POLL_SECONDS: ${AEF_CLOSED_SESSION_MAINTENANCE_ACTIVE_POLL_SECONDS:-30}
+      AEF_CLOSED_SESSION_MAINTENANCE_IDLE_POLL_SECONDS: ${AEF_CLOSED_SESSION_MAINTENANCE_IDLE_POLL_SECONDS:-1800}
+      AEF_CLOSED_SESSION_MAINTENANCE_REPAIR_TIMEOUT_SECONDS: ${AEF_CLOSED_SESSION_MAINTENANCE_REPAIR_TIMEOUT_SECONDS:-30}
+      AEF_CLOSED_SESSION_MAINTENANCE_MAX_PROVIDER_ADMISSIONS: ${AEF_CLOSED_SESSION_MAINTENANCE_MAX_PROVIDER_ADMISSIONS:-1}
+      AEF_CLOSED_SESSION_MAINTENANCE_ADMISSION_WINDOW_SECONDS: ${AEF_CLOSED_SESSION_MAINTENANCE_ADMISSION_WINDOW_SECONDS:-43200}
+      AEF_CLOSED_SESSION_MAINTENANCE_MAX_PROVIDER_ADMISSIONS_PER_WINDOW: ${AEF_CLOSED_SESSION_MAINTENANCE_MAX_PROVIDER_ADMISSIONS_PER_WINDOW:-32}
+      AEF_CLOSED_SESSION_MAINTENANCE_FAILURE_THRESHOLD: ${AEF_CLOSED_SESSION_MAINTENANCE_FAILURE_THRESHOLD:-3}
+      AEF_CLOSED_SESSION_MAINTENANCE_BREAKER_BACKOFF_SECONDS: ${AEF_CLOSED_SESSION_MAINTENANCE_BREAKER_BACKOFF_SECONDS:-21600}
+      AEF_RESEARCH_CAPTURE_ENABLED: ${AEF_RESEARCH_CAPTURE_ENABLED:-false}
+      AEF_RESEARCH_CAPTURE_INSTRUMENT_IDS: ${AEF_RESEARCH_CAPTURE_INSTRUMENT_IDS:-[]}
+      AEF_RESEARCH_CAPTURE_TIMEFRAME: ${AEF_RESEARCH_CAPTURE_TIMEFRAME:-5m}
+      AEF_RESEARCH_CAPTURE_RECONCILE_SECONDS: ${AEF_RESEARCH_CAPTURE_RECONCILE_SECONDS:-15}
+      AEF_VIX_INSTRUMENT_ID: ${AEF_VIX_INSTRUMENT_ID:-}
+      AEF_TELEGRAM_ENABLED: ${AEF_TELEGRAM_ENABLED:-}
+      AEF_TELEGRAM_BOT_TOKEN: ${AEF_TELEGRAM_BOT_TOKEN:-}
+      AEF_TELEGRAM_CHAT_ID: ${AEF_TELEGRAM_CHAT_ID:-}
+      AEF_TELEGRAM_TIMEOUT_SECONDS: ${AEF_TELEGRAM_TIMEOUT_SECONDS:-}
+      AEF_TELEGRAM_INTERACTIVE_ENABLED: ${AEF_TELEGRAM_INTERACTIVE_ENABLED:-}
+      AEF_TELEGRAM_INTERACTIVE_POLL_TIMEOUT_SECONDS: ${AEF_TELEGRAM_INTERACTIVE_POLL_TIMEOUT_SECONDS:-}
+      AEF_DISCORD_SIGNALS_ENABLED: ${AEF_DISCORD_SIGNALS_ENABLED:-}
+      AEF_DISCORD_SIGNALS_CHANNEL_IDS: ${AEF_DISCORD_SIGNALS_CHANNEL_IDS:-}
+      AEF_DISCORD_SIGNALS_AUTHOR_ID: ${AEF_DISCORD_SIGNALS_AUTHOR_ID:-}
+      AEF_DISCORD_SIGNALS_AUTHOR_NAME: ${AEF_DISCORD_SIGNALS_AUTHOR_NAME:-GAA}
+      AEF_DISCORD_SIGNALS_BRIDGE_SECRET: ${AEF_DISCORD_SIGNALS_BRIDGE_SECRET:-}
+      AEF_DISCORD_SIGNALS_RETENTION_HOURS: ${AEF_DISCORD_SIGNALS_RETENTION_HOURS:-72}
+      AEF_DISCORD_SIGNALS_HISTORY_LIMIT: ${AEF_DISCORD_SIGNALS_HISTORY_LIMIT:-500}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      AI_THIRD_OPINION_OLLAMA_MODEL: ${AI_THIRD_OPINION_OLLAMA_MODEL:-deepseek-r1:8b}
+      CODEX_ADVISOR_BASE_URL: ${CODEX_ADVISOR_BASE_URL:-http://host.docker.internal:8765}
+      CODEX_ADVISOR_BRIDGE_TOKEN_FILE: /run/secrets/codex_advisor_bridge_token
+      AEF_SECRET_FILE: /run/secrets/martincall_runtime_secrets
+    ports:
+      - "${MARTINCALL_BIND_ADDRESS:-127.0.0.1}:8000:8000"
+    volumes:
+      - ${MARTINCALL_DATA_ROOT:-../data}:/data
+    secrets:
+      - martincall_runtime_secrets
+      - codex_advisor_bridge_token
+    depends_on:
+      martincall-timescaledb:
+        condition: service_healthy
+    networks:
+      - martincall-net
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "--silent",
+          "--show-error",
+          "--max-time",
+          "2",
+          "--output",
+          "/dev/null",
+          "http://127.0.0.1:8000/ready",
+        ]
+      interval: 60s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  martincall-tick-feed:
+    image: martincall-app:${MARTINCALL_APP_IMAGE_TAG:-local}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_GIT_SHA: ${BUILD_GIT_SHA:-}
+        BUILD_DATE: ${BUILD_DATE:-}
+        BUILD_VERSION: ${BUILD_VERSION:-}
+    #container_name: martincall-tick-feed
+    mem_limit: 512mb
+    profiles: ["ticks"]
+    command:
+      - python
+      - scripts/ibkr_tick_feed.py
+      - --instrument-id
+      - ${MARTINCALL_TICK_INSTRUMENT_ID:-}
+      - --flush-interval
+      - ${MARTINCALL_TICK_FLUSH_INTERVAL:-1.0}
+      - --max-batch
+      - ${MARTINCALL_TICK_MAX_BATCH:-500}
+      - --max-flush-batches
+      - ${MARTINCALL_TICK_MAX_FLUSH_BATCHES:-20}
+      - --retention-hours
+      - ${MARTINCALL_TICK_RETENTION_HOURS:-6}
+      - --purge-interval
+      - ${MARTINCALL_TICK_PURGE_INTERVAL:-3600}
+    environment:
+      AEF_DATABASE_URL: postgresql://${MARTINCALL_POSTGRES_USER:-martincall}:${MARTINCALL_POSTGRES_PASSWORD:?MARTINCALL_POSTGRES_PASSWORD must be set}@martincall-timescaledb:5432/${MARTINCALL_POSTGRES_DB:-martincall}
+      AEF_IBKR_HOST: ${AEF_IBKR_HOST:-host.docker.internal}
+      AEF_IBKR_PORT: ${AEF_IBKR_PORT:-7497}
+      AEF_IBKR_CLIENT_ID: ${AEF_IBKR_CLIENT_ID:-17}
+      AEF_IBKR_TICK_CLIENT_ID: ${AEF_IBKR_TICK_CLIENT_ID:-4017}
+      AEF_IBKR_READONLY: ${AEF_IBKR_READONLY:-true}
+      AEF_TICK_RETENTION_HOURS: ${MARTINCALL_TICK_RETENTION_HOURS:-6}
+      AEF_TICK_CHUNK_MINUTES: ${MARTINCALL_TICK_CHUNK_MINUTES:-30}
+    volumes:
+      - ${MARTINCALL_DATA_ROOT:-../data}:/data
+    depends_on:
+      martincall-timescaledb:
+        condition: service_healthy
+    networks:
+      - martincall-net
+    restart: "no"
+
+volumes:
+  martincall-timescale-data:
+    name: martincall-timescale-data
+    external: true
+
+networks:
+  martincall-net:
+    name: martincall-net
+    external: true
+
+secrets:
+  martincall_runtime_secrets:
+    file: ./secrets/martincall_runtime.env
+  codex_advisor_bridge_token:
+    file: ./secrets/codex_advisor_bridge.token

@@ -1,0 +1,53 @@
+name: Full Test Suite
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - name: Install dev dependencies
+        run: |
+          pip install --requirement requirements.lock
+          pip install -e ".[dev]"
+      - name: Run lint and format checks
+        run: PYTHON=python make lint
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      timescaledb:
+        image: timescale/timescaledb:latest-pg16@sha256:87f39af0a38cb42e4add367d9dfad2087a53fe5c9b24b5bc0dc66bd204b0665f
+        env:
+          POSTGRES_DB: martincall
+          POSTGRES_USER: martincall
+          POSTGRES_PASSWORD: martincall_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U martincall -d martincall"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      AEF_DATABASE_URL: postgresql://martincall:martincall_test@127.0.0.1:5432/martincall
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - name: Install dev dependencies
+        run: |
+          pip install --requirement requirements.lock
+          pip install -e ".[dev]"
+      - name: Install Chromium for browser capture regression
+        run: python -m playwright install --with-deps chromium
+      - name: Run full test suite
+        run: PYTHON=python make test

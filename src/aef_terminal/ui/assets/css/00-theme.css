@@ -1,0 +1,217 @@
+:root {
+      color-scheme: dark;
+      --side-width: 360px;
+      --volume-height: 160px;
+      --bg: #0f1318;
+      --panel: #171d24;
+      --panel-2: #202833;
+      --text: #e6edf3;
+      --muted: #8b98a8;
+      --green: #00a676;
+      --red: #d64550;
+      --up: var(--green);
+      --down: var(--red);
+      --gold: #d4af37;
+      --blue: #4aa3ff;
+      --focus: var(--blue);
+      --selection: var(--blue);
+      --positive: var(--green);
+      --negative: var(--red);
+      --danger: var(--red);
+      --warning: var(--gold);
+      --provisional: var(--gold);
+      --accent: var(--focus);
+      --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-numeric: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --font-micro: 8px;
+      --font-caption: 9px;
+      --font-compact: 10px;
+      --font-status: var(--font-micro);
+      --line: #303b48;
+      --chart-bg: #10151b;
+      --grid-line: #26303a;
+      --axis: #7f8b9b;
+      --session-asia: rgba(74, 163, 255, 0.045);
+      --session-london: rgba(212, 175, 55, 0.055);
+      --session-new-york: rgba(0, 166, 118, 0.05);
+      --session-label: rgba(230, 237, 243, 0.38);
+      --crosshair: rgba(230, 237, 243, 0.62);
+      --crosshair-muted: rgba(230, 237, 243, 0.42);
+      --tooltip-bg: #263241;
+      --tooltip-text: #e6edf3;
+      --drawing: #f5a623;
+      --drawing-muted: rgba(245, 166, 35, 0.28);
+      --ema20: #facc15;
+      --ema233: #38bdf8;
+      --vwap: #22c55e;
+      --level-high: #d64550;
+      --level-low: #00a676;
+      --plan-trigger: #d4af37;
+      --plan-stop: #d64550;
+      --plan-target: #00a676;
+      --ny-range: #4aa3ff;
+      --canvas-up: #00d98f;
+      --canvas-down: #ff5a66;
+      --canvas-gold: #ffd166;
+      --canvas-blue: #60a5fa;
+      --canvas-purple: #c084fc;
+      --canvas-neutral: #9ca8b8;
+      --canvas-ink: #e6edf3;
+      --canvas-label-dark: #061a2f;
+      --canvas-label-light: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    /* Стили для иконок инструментов в верхней панели */
+    .tool-button svg.icon {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      display: inline-block;
+      vertical-align: middle;
+      pointer-events: none;
+    }
+
+    .tool-button svg.icon.icon-fib-ruler {
+      fill: none;
+      stroke: none;
+      --fib-stroke: #0f172a;
+      --fib-diagonal-opacity: 0.4;
+    }
+
+    body:not(.theme-light) .tool-button svg.icon.icon-fib-ruler {
+      --fib-stroke: #e8eef6;
+      --fib-diagonal-opacity: 0.5;
+    }
+
+    .tool-button svg.icon.icon-fib-ruler line {
+      stroke: var(--fib-stroke);
+      stroke-width: 1;
+      stroke-linecap: round;
+      fill: none;
+    }
+
+    .tool-button svg.icon.icon-fib-ruler line.fib-diagonal {
+      stroke-dasharray: 1 1;
+      opacity: var(--fib-diagonal-opacity);
+    }
+
+    .tool-button:hover svg.icon.icon-fib-ruler line,
+    .tool-button.active svg.icon.icon-fib-ruler line {
+      stroke: currentColor;
+      opacity: 1;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 13px/1.45 var(--font-ui);
+      overflow: hidden;
+    }
+    body.theme-light {
+      color-scheme: light;
+      --bg: #f4f6f9;
+      --panel: #ffffff;
+      --panel-2: #eef3f8;
+      --text: #142033;
+      --muted: #667386;
+      --green: #008f63;
+      --red: #c73d4b;
+      --up: var(--green);
+      --down: var(--red);
+      --gold: #b88a00;
+      --blue: #1f7edb;
+      --focus: var(--blue);
+      --selection: var(--blue);
+      --positive: var(--green);
+      --negative: var(--red);
+      --danger: var(--red);
+      --warning: var(--gold);
+      --provisional: var(--gold);
+      --accent: var(--focus);
+      --line: #d7dee8;
+      --chart-bg: #ffffff;
+      --grid-line: #e4e9f0;
+      --axis: #657386;
+      --session-asia: rgba(31, 126, 219, 0.06);
+      --session-london: rgba(184, 138, 0, 0.07);
+      --session-new-york: rgba(0, 143, 99, 0.06);
+      --session-label: rgba(20, 32, 51, 0.42);
+      --crosshair: rgba(20, 32, 51, 0.62);
+      --crosshair-muted: rgba(20, 32, 51, 0.40);
+      --tooltip-bg: #e8eef6;
+      --tooltip-text: #142033;
+      --drawing: #123a63;
+      --drawing-muted: rgba(18, 58, 99, 0.50);
+      --ema20: #facc15;
+      --ema233: #38bdf8;
+      --vwap: #22c55e;
+      --level-high: #c73d4b;
+      --level-low: #008f63;
+      --plan-trigger: #b88a00;
+      --plan-stop: #c73d4b;
+      --plan-target: #008f63;
+      --ny-range: #1f7edb;
+      --canvas-up: #007a55;
+      --canvas-down: #b83240;
+      --canvas-gold: #8a5f00;
+      --canvas-blue: #1266c3;
+      --canvas-purple: #6d28d9;
+      --canvas-neutral: #526075;
+      --canvas-ink: #142033;
+      --canvas-label-dark: #061a2f;
+      --canvas-label-light: #ffffff;
+    }
+
+    :where(button, input, select, textarea, [tabindex]):focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .directional-go-mark {
+      display: inline-block;
+      line-height: 1;
+      transform-origin: 50% 50%;
+    }
+    .directional-go-mark.short {
+      transform: scaleY(-1);
+    }
+
+    body.ui-motion-reduced *,
+    body.ui-motion-reduced *::before,
+    body.ui-motion-reduced *::after,
+    body.ui-motion-off *,
+    body.ui-motion-off *::before,
+    body.ui-motion-off *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.001ms !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+      }
+    }

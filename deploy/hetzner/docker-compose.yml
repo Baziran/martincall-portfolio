@@ -1,0 +1,141 @@
+name: martincall
+
+services:
+  martincall-timescaledb:
+    mem_limit: ${MARTINCALL_DB_MEMORY:-1536m}
+    cpus: ${MARTINCALL_DB_CPUS:-1.0}
+    command:
+      - postgres
+      - -c
+      - shared_buffers=192MB
+      - -c
+      - work_mem=4MB
+      - -c
+      - maintenance_work_mem=48MB
+      - -c
+      - effective_cache_size=512MB
+      - -c
+      - max_parallel_workers_per_gather=1
+      - -c
+      - max_parallel_workers=2
+      - -c
+      - max_worker_processes=10
+      - -c
+      - timescaledb.max_background_workers=6
+      - -c
+      - wal_buffers=16MB
+      - -c
+      - max_wal_size=512MB
+      - -c
+      - min_wal_size=128MB
+      - -c
+      - checkpoint_timeout=15min
+      - -c
+      - checkpoint_completion_target=0.9
+      - -c
+      - effective_io_concurrency=200
+      - -c
+      - random_page_cost=1.1
+      - -c
+      - default_statistics_target=100
+    restart: unless-stopped
+
+  martincall-app:
+    mem_limit: ${MARTINCALL_APP_MEMORY:-768m}
+    cpus: ${MARTINCALL_APP_CPUS:-1.0}
+    environment:
+      AEF_IBKR_HOST: ib-gateway
+      AEF_IBKR_PORT: ${AEF_IBKR_PORT:-4003}
+      AEF_IBKR_GATEWAY_LOGIN_CONTROL_HOST: ib-gateway
+      AEF_IBKR_GATEWAY_LOGIN_CONTROL_PORT: "7463"
+      AEF_IBKR_GEX_HOST: ib-gateway
+      AEF_IBKR_GEX_PORT: ${AEF_IBKR_GEX_PORT:-4003}
+      AEF_IBKR_READONLY: "true"
+      AEF_SECRET_FILE: !reset null
+      CODEX_ADVISOR_BRIDGE_TOKEN_FILE: !reset null
+      AEF_CLOSED_SESSION_MAINTENANCE_ENABLED: "false"
+      AEF_GEX_SCHEDULER_ENABLED: "false"
+      AEF_TELEGRAM_ENABLED: "false"
+      AEF_DISCORD_SIGNALS_ENABLED: "false"
+    secrets: !reset []
+    restart: unless-stopped
+
+  ib-gateway-settings-init:
+    image: ghcr.io/gnzsnz/ib-gateway:10.45.1j@sha256:91165c0752ca534c0dad3c40683ae7c2745974d4d277651a90e90411ca609d8d
+    user: "0:0"
+    entrypoint:
+      - /bin/sh
+      - -c
+    command:
+      - chown -R 1000:1000 /home/ibgateway/tws_settings
+    network_mode: none
+    read_only: true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - FOWNER
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - martincall-ibkr-settings:/home/ibgateway/tws_settings
+    restart: "no"
+
+  ib-gateway:
+    image: ghcr.io/gnzsnz/ib-gateway:10.45.1j@sha256:91165c0752ca534c0dad3c40683ae7c2745974d4d277651a90e90411ca609d8d
+    mem_limit: ${IB_GATEWAY_MEMORY:-768m}
+    cpus: ${IB_GATEWAY_CPUS:-1.0}
+    shm_size: 128m
+    env_file:
+      - ${IB_GATEWAY_ENV_FILE:-/opt/martincall/shared/gateway.env}
+    environment:
+      TRADING_MODE: live
+      READ_ONLY_API: "yes"
+      TWS_ACCEPT_INCOMING: accept
+      TWS_PASSWORD_FILE: /run/secrets/ibkr_password
+      VNC_SERVER_PASSWORD_FILE: /run/secrets/vnc_password
+      TWS_SETTINGS_PATH: /home/ibgateway/tws_settings
+      TWOFA_TIMEOUT_ACTION: exit
+      RELOGIN_AFTER_TWOFA_TIMEOUT: "no"
+      MARTINCALL_IBKR_LOGIN_CONTROL_PORT: "7463"
+      EXISTING_SESSION_DETECTED_ACTION: primary
+      ALLOW_BLIND_TRADING: "no"
+      JAVA_HEAP_SIZE: "512"
+      TIME_ZONE: Asia/Jerusalem
+    ports:
+      - "${MARTINCALL_BIND_ADDRESS:-127.0.0.1}:5900:5900"
+    volumes:
+      - martincall-ibkr-settings:/home/ibgateway/tws_settings
+      - ./deploy/hetzner/ib-gateway-control:/home/ibgateway/martincall-control:ro
+    command:
+      - /home/ibgateway/martincall-control/supervisor.sh
+    expose:
+      - "7463"
+    secrets:
+      - ibkr_password
+      - vnc_password
+    networks:
+      - martincall-net
+    depends_on:
+      ib-gateway-settings-init:
+        condition: service_completed_successfully
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+    restart: unless-stopped
+
+volumes:
+  martincall-timescale-data:
+    external: false
+  martincall-ibkr-settings:
+    name: martincall-ibkr-settings
+
+secrets:
+  martincall_runtime_secrets: !reset null
+  codex_advisor_bridge_token: !reset null
+  ibkr_password:
+    file: ${IB_GATEWAY_PASSWORD_FILE:-/opt/martincall/shared/secrets/ibkr_password}
+  vnc_password:
+    file: ${IB_GATEWAY_VNC_PASSWORD_FILE:-/opt/martincall/shared/secrets/vnc_password}

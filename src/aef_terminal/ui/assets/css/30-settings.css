@@ -1,0 +1,493 @@
+    .settings-panel {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: min(400px, calc(100vw - 20px));
+      z-index: 20;
+      display: none;
+      padding: 12px;
+      max-height: min(760px, calc(100vh - 20px));
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.32);
+    }
+    @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+      .settings-panel {
+        background: color-mix(in srgb, var(--panel) 92%, transparent);
+        -webkit-backdrop-filter: blur(8px) saturate(112%);
+        backdrop-filter: blur(8px) saturate(112%);
+      }
+    }
+    .settings-panel.open { display: block; }
+    .settings-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-weight: 800;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+    }
+    .settings-head :is(button, input, select, textarea, a) { cursor: pointer; }
+    .settings-panel.floating-panel-dragging .settings-head { cursor: grabbing; }
+    .settings-save-state {
+      margin-left: auto;
+      margin-right: 6px;
+      padding: 2px 6px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--muted);
+      font: 750 9px/1.3 var(--font-ui);
+      cursor: default;
+    }
+    .settings-save-state.saving {
+      color: var(--warning);
+    }
+    .settings-save-state.error {
+      border-color: color-mix(in srgb, var(--danger) 42%, var(--line));
+      color: var(--danger);
+      cursor: pointer;
+    }
+    .settings-save-state.saved:disabled {
+      opacity: 0.8;
+    }
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 0;
+      border-top: 1px solid var(--line);
+    }
+    .settings-row:first-of-type { border-top: 0; }
+    .settings-row > :first-child {
+      flex: 1;
+      text-align: left;
+      min-width: 0;
+    }
+    .settings-row output {
+      font-weight: 700;
+    }
+    .segmented {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .segmented button {
+      border: 0;
+      background: color-mix(in srgb, var(--panel) 84%, var(--bg));
+      color: var(--text);
+      padding: 5px 9px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+    }
+    .segmented button.active {
+      background: var(--gold);
+      color: #111820;
+    }
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text);
+      cursor: pointer;
+      user-select: none;
+    }
+    .settings-control {
+      height: 24px;
+      min-width: 78px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: color-mix(in srgb, var(--panel) 84%, var(--bg));
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      padding: 2px 6px;
+      text-align: right;
+    }
+    .settings-control.short {
+      color: var(--text);
+    }
+    .settings-control.tiny {
+      min-width: 54px;
+      width: 54px;
+      color: var(--text);
+    }
+    .settings-control.compact-button {
+      min-width: 0;
+      width: auto;
+      padding: 2px 7px;
+      cursor: pointer;
+    }
+    .settings-control.backup-select {
+      width: 168px;
+      max-width: 58%;
+    }
+    .settings-note {
+      padding: 6px 0 2px;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+    .inline-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-width: 0;
+    }
+    .option-target-active-list {
+      width: 100%;
+      max-height: 120px;
+      overflow: auto;
+      display: grid;
+      gap: 4px;
+      font-size: var(--font-compact);
+      line-height: 1.25;
+    }
+    .option-target-active-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 22px;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 5px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: color-mix(in srgb, var(--panel) 86%, var(--bg));
+    }
+    .option-target-active-row.active {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .option-target-select {
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+    .option-target-select:focus-visible {
+      outline: 1px solid var(--focus);
+      outline-offset: 2px;
+    }
+    .option-target-select span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .option-target-delete {
+      min-width: 20px;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+    }
+    body.view-preset-mobile .settings-panel {
+      top: 6px;
+      right: 6px;
+      width: min(340px, calc(100vw - 12px));
+      max-height: calc(100vh - 12px);
+      padding: 10px;
+    }
+    body.view-preset-mobile .settings-row {
+      gap: 8px;
+      padding: 8px 0;
+    }
+    body.view-preset-mobile .settings-control {
+      min-width: 92px;
+      height: 28px;
+    }
+    .color-control {
+      width: 36px;
+      min-width: 36px;
+      padding: 1px 2px;
+      cursor: pointer;
+    }
+    .settings-group {
+      min-width: 0;
+      margin-top: 8px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: color-mix(in srgb, var(--panel) 88%, var(--bg));
+    }
+    .settings-group-summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, auto) 12px;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+      padding: 9px 10px;
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+    }
+    .settings-group-summary::-webkit-details-marker { display: none; }
+    .settings-group-summary::after {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-right: 2px solid var(--muted);
+      border-bottom: 2px solid var(--muted);
+      transform: rotate(45deg);
+      transition: transform 120ms ease;
+    }
+    .settings-group[open] > .settings-group-summary::after {
+      transform: rotate(225deg);
+    }
+    .settings-group-summary:hover {
+      background: color-mix(in srgb, var(--selection) 32%, transparent);
+    }
+    .settings-group-summary:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: -2px;
+    }
+    .settings-group-copy {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+    .settings-group-title {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.2;
+    }
+    .settings-group-description,
+    .settings-group-value {
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .settings-group-value {
+      max-width: 142px;
+      text-align: right;
+    }
+    .settings-group-body {
+      min-width: 0;
+      padding: 0 10px 3px;
+      border-top: 1px solid var(--line);
+      background: color-mix(in srgb, var(--panel) 76%, var(--bg));
+    }
+    .settings-group-body-card {
+      padding: 0 8px 8px;
+    }
+    .settings-subsection-label {
+      padding-top: 8px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
+    }
+    .settings-subsection-label + .settings-row {
+      border-top: 0;
+    }
+    .telegram-settings-group {
+      display: grid;
+      min-width: 0;
+      margin-top: 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--panel) 82%, var(--bg));
+    }
+    .telegram-settings-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      padding: 9px;
+      border-top: 1px solid var(--line);
+    }
+    .telegram-settings-row:first-child {
+      border-top: 0;
+    }
+    .telegram-settings-copy {
+      min-width: 0;
+    }
+    .telegram-settings-copy b {
+      display: block;
+      font-size: 12px;
+      line-height: 1.25;
+    }
+    .telegram-settings-copy .health-status {
+      overflow-wrap: anywhere;
+    }
+    .health-dashboard {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .health-diagnostics-request {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      margin-top: 8px;
+    }
+    .health-diagnostics-request .tool-button {
+      flex: 0 0 auto;
+    }
+    .health-diagnostics-request .health-status {
+      min-width: 0;
+      margin-top: 0;
+    }
+    .health-card {
+      min-width: 0;
+      min-height: 46px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--panel) 82%, var(--bg));
+    }
+    .health-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+    .health-card b {
+      display: block;
+      margin-top: 2px;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+    .health-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 7px;
+      min-width: 0;
+    }
+    .health-inline {
+      display: grid;
+      grid-template-columns: auto auto minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .health-inline span {
+      margin: 0;
+    }
+    .health-inline b {
+      margin: 0;
+      white-space: nowrap;
+    }
+    .health-inline .health-actions {
+      justify-self: end;
+      margin-top: 0;
+    }
+    .health-actions .tool-button {
+      flex: 0 0 auto;
+      min-width: 54px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 7px;
+      line-height: 1;
+    }
+    .health-port-input {
+      flex: 1 1 58px;
+      width: 64px;
+      min-width: 52px;
+      height: 22px;
+      padding: 1px 5px;
+      text-align: center;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .health-toggle {
+      margin-top: 7px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .health-status,
+    .health-checked {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.25;
+    }
+    .health-checked {
+      padding-top: 8px;
+    }
+    .health-status-line {
+      font-size: 11px;
+      white-space: normal;
+    }
+    .health-card.ok b { color: var(--green); }
+    .health-card.warn b { color: var(--gold); }
+    .health-card.bad b { color: var(--red); }
+    .health-card.wide { grid-column: 1 / -1; }
+    .health-lines {
+      margin-top: 4px;
+      color: var(--text);
+      font-size: 11px;
+      line-height: 1.35;
+      font-variant-numeric: tabular-nums;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+    }
+
+    .vsa-color-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+      gap: 6px 10px;
+      width: 100%;
+      margin-top: 4px;
+      padding-top: 4px;
+      border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+    }
+
+    .vsa-color-legend-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .vsa-color-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      flex: 0 0 14px;
+      margin-top: 1px;
+      box-sizing: border-box;
+    }
+
+    .vsa-color-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+      line-height: 1.2;
+    }
+
+    .vsa-color-copy b {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .vsa-color-copy span {
+      font-size: 10px;
+      color: var(--muted);
+    }

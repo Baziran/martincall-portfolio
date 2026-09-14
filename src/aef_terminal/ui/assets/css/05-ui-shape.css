@@ -1,0 +1,540 @@
+    :root {
+      --ui-frame-inset: 3px;
+      --ui-frame-gap: 3px;
+      --ui-card-inset: 8px;
+    }
+
+    body.ui-flat {
+      --ui-frame-inset: 2px;
+      --ui-frame-gap: 2px;
+      --ui-card-inset: 2px;
+    }
+
+    body.ui-flat :where(*, *::before, *::after) {
+      border-radius: 0 !important;
+    }
+
+    body.ui-flat input[type="checkbox"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 13px;
+      height: 13px;
+      flex: 0 0 13px;
+      margin: 0;
+      border: 1px solid var(--line);
+      background-color: color-mix(in srgb, var(--panel) 88%, var(--bg));
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 10px 10px;
+      box-shadow: none;
+      vertical-align: middle;
+    }
+
+    body.ui-flat input[type="checkbox"]:checked {
+      border-color: var(--selection);
+      background-color: var(--selection);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.2%206.2%204.8%208.8%209.9%203.4' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      box-shadow: none;
+    }
+
+    body.ui-flat input[type="checkbox"]:focus-visible {
+      outline: 1px solid var(--focus);
+      outline-offset: 1px;
+    }
+
+    body.ui-flat input[type="checkbox"]:disabled {
+      opacity: 0.5;
+    }
+
+    body.ui-flat .side-panel {
+      padding: var(--ui-frame-inset);
+      gap: var(--ui-frame-gap);
+    }
+
+    body.ui-flat main {
+      --sidebar-split-width: 2px;
+    }
+
+    body.ui-flat .chart-panel {
+      gap: 0;
+    }
+
+    body.ui-flat .chart-top {
+      gap: var(--ui-frame-gap);
+      padding-left: var(--chart-title-gap, 8px);
+      padding-right: var(--ui-frame-inset);
+    }
+
+    body.ui-flat .chart-frame,
+    body.ui-flat .price-frame,
+    body.ui-flat .volume-frame {
+      min-width: 0;
+    }
+
+    body.ui-flat .splitter {
+      flex-basis: 2px;
+    }
+
+    body.ui-flat .settings-panel {
+      top: var(--ui-frame-inset);
+      right: var(--ui-frame-inset);
+      padding: var(--ui-frame-inset);
+      max-height: calc(100vh - (var(--ui-frame-inset) * 2));
+    }
+
+    body.ui-flat .modal {
+      padding: var(--ui-frame-inset);
+    }
+
+    body.ui-flat .modal-card {
+      width: min(540px, calc(100vw - (var(--ui-frame-inset) * 2)));
+      max-height: min(760px, calc(100vh - (var(--ui-frame-inset) * 2)));
+    }
+
+    body.ui-flat .debug-panel {
+      left: var(--ui-frame-inset);
+      bottom: var(--ui-frame-inset);
+      width: min(300px, calc(100vw - (var(--ui-frame-inset) * 2)));
+    }
+
+    body.ui-flat .debug-panel:hover,
+    body.ui-flat .debug-panel:focus-within {
+      width: min(520px, calc(100vw - (var(--ui-frame-inset) * 2)));
+    }
+
+    body.ui-flat .urgent-risk-feed {
+      top: var(--ui-frame-inset);
+      left: var(--ui-frame-inset);
+      width: fit-content;
+      max-width: min(600px, calc(100% - (var(--ui-frame-inset) * 2)));
+      max-height: calc(100% - (var(--ui-frame-inset) * 2));
+      padding: var(--ui-frame-inset);
+      border-radius: 0;
+      background: var(--panel);
+      box-shadow: none;
+    }
+
+    body.ui-flat .urgent-risk-feed .risk-feed-title {
+      gap: var(--ui-frame-gap);
+      margin-bottom: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .urgent-risk-feed .risk-feed-close {
+      border-color: var(--line);
+      border-radius: 0;
+      background: color-mix(in srgb, var(--panel-2) 76%, var(--bg));
+      box-shadow: none;
+    }
+
+    body.ui-flat .urgent-risk-feed .risk-feed-dot {
+      box-shadow: none;
+    }
+
+    body.ui-flat .urgent-risk-feed .risk-feed-item {
+      gap: var(--ui-frame-gap);
+      padding: var(--ui-frame-gap) 0 0;
+    }
+
+    body.ui-flat .urgent-risk-feed .risk-feed-tag {
+      gap: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .context-menu {
+      padding: var(--ui-frame-inset);
+    }
+
+    body.ui-flat .modal-head,
+    body.ui-flat .modal-actions,
+    body.ui-flat .modal-body,
+    body.ui-flat .canvas-tooltip,
+    body.ui-flat .status-tooltip {
+      padding: var(--ui-frame-inset);
+    }
+
+    body.ui-flat .object-list,
+    body.ui-flat .object-tabs {
+      gap: var(--ui-frame-gap);
+      margin-bottom: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .object-row,
+    body.ui-flat .object-tab,
+    body.ui-flat .gex-sidebar-settings,
+    body.ui-flat .canvas-tooltip,
+    body.ui-flat .status-tooltip,
+    body.ui-flat .history-notice,
+    body.ui-flat .quality-badge,
+    body.ui-flat .urgent-risk-feed {
+      box-shadow: none;
+    }
+
+    body.ui-flat .trade-setup-panel {
+      gap: var(--ui-frame-gap);
+      margin-top: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .trade-setup-runtime {
+      gap: var(--ui-frame-gap);
+      margin-top: var(--ui-frame-gap);
+      padding: var(--ui-frame-inset);
+    }
+
+    body.ui-flat .trade-setup-runtime-head,
+    body.ui-flat .trade-setup-runtime-grid {
+      column-gap: var(--ui-frame-gap);
+      row-gap: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .grid {
+      gap: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .side-tabs {
+      gap: var(--ui-frame-gap);
+      margin: 0 0 var(--ui-frame-gap);
+      padding: var(--ui-frame-inset);
+    }
+
+    body.ui-flat .workspace-presets {
+      gap: var(--ui-frame-gap);
+      padding: var(--ui-frame-inset);
+    }
+
+    body.ui-flat #indicator-runtime-list {
+      gap: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .chart-tools {
+      gap: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .chart-status-strip {
+      gap: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .timeframe-buttons {
+      gap: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .draw-tools {
+      gap: var(--ui-frame-gap);
+      padding-right: var(--ui-frame-gap);
+      margin-right: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .tool-button,
+    body.ui-flat .price-fit-height-button,
+    body.ui-flat .gex-sidebar-icon-button,
+    body.ui-flat .gex-sidebar-refresh-button,
+    body.ui-flat .gex-context-mode-button,
+    body.ui-flat .option-board-button,
+    body.ui-flat .chart-advisor-button,
+    body.ui-flat .gex-sidebar-choice-grid button {
+      box-shadow: none;
+    }
+
+    body.ui-flat .side-panel > .card {
+      padding: var(--ui-card-inset);
+      gap: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .section-title {
+      margin-bottom: var(--ui-frame-gap);
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    body.ui-flat .watchlist-add,
+    body.ui-flat .watchlist {
+      gap: var(--ui-frame-gap);
+      margin-bottom: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .watchlist-row {
+      padding: 2px 3px;
+    }
+
+    body.ui-flat .side-instruments-runtime {
+      padding-top: var(--ui-frame-gap);
+      margin-top: auto;
+    }
+
+    body.ui-flat #indicator-runtime-list {
+      gap: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .indicator-runtime {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    body.ui-flat .indicator-row {
+      padding: var(--ui-frame-inset);
+    }
+
+    body.ui-flat .indicator-controls {
+      padding-left: 0;
+      gap: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .indicator-runtime-row {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    body.ui-flat .indicator-control-group {
+      padding: var(--ui-frame-inset);
+      margin-top: var(--ui-frame-gap);
+    }
+
+    body.ui-flat .settings-panel,
+    body.ui-flat .settings-section,
+    body.ui-flat .settings-row,
+    body.ui-flat .settings-grid,
+    body.ui-flat .settings-control,
+    body.ui-flat .preset-select,
+    body.ui-flat .indicator-manager-panel,
+    body.ui-flat .indicator-manager-row,
+    body.ui-flat .indicator-calc-status {
+      gap: var(--ui-frame-gap);
+      box-shadow: none;
+    }
+
+    body.ui-rounded .indicator-controls .toggle {
+      border-radius: 4px;
+    }
+
+    body.ui-rounded .indicator-head-row .indicator-show {
+      border-radius: 4px;
+    }
+
+    body.ui-rounded .indicator-calc-switch {
+      border-radius: 999px;
+    }
+
+    body.ui-rounded .indicator-calc-knob {
+      border-radius: 50%;
+    }
+
+    body.ui-tv-flat {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --panel-2: #f4f6f8;
+      --text: #1f2329;
+      --muted: #6b7280;
+      --line: #e6e8eb;
+      --chart-bg: #ffffff;
+      --grid-line: #edf0f2;
+      --axis: #5f6773;
+      --tooltip-bg: #ffffff;
+      --tooltip-text: #1f2329;
+      --green: #22ab94;
+      --red: #f23645;
+      --up: var(--green);
+      --down: var(--red);
+      --gold: #f59e0b;
+      --blue: #2962ff;
+      --focus: var(--blue);
+      --selection: var(--blue);
+      --positive: var(--green);
+      --negative: var(--red);
+      --danger: var(--red);
+      --warning: var(--gold);
+      --provisional: var(--gold);
+      --accent: var(--focus);
+      --canvas-up: #22ab94;
+      --canvas-down: #f23645;
+      --drawing-muted: rgba(31, 35, 41, 0.48);
+      --canvas-gold: #b66d00;
+      --canvas-blue: #2962ff;
+      --canvas-purple: #7b61ff;
+      --canvas-neutral: #787b86;
+      --canvas-ink: #1f2329;
+      --canvas-label-dark: #111827;
+      --canvas-label-light: #ffffff;
+      background: var(--bg);
+    }
+
+    body.theme-light.ui-tv-flat {
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --panel-2: #f4f6f8;
+      --text: #1f2329;
+      --muted: #6b7280;
+      --line: #e6e8eb;
+      --chart-bg: #ffffff;
+      --grid-line: #edf0f2;
+      --axis: #5f6773;
+      --tooltip-bg: #ffffff;
+      --tooltip-text: #1f2329;
+      --drawing-muted: rgba(31, 35, 41, 0.48);
+      --canvas-gold: #b66d00;
+    }
+
+    body:not(.theme-light).ui-tv-flat {
+      color-scheme: dark;
+      --bg: #131722;
+      --panel: #131722;
+      --panel-2: #1e222d;
+      --text: #d1d4dc;
+      --muted: #787b86;
+      --line: #2a2e39;
+      --chart-bg: #131722;
+      --grid-line: #242833;
+      --axis: #868993;
+      --tooltip-bg: #1e222d;
+      --tooltip-text: #d1d4dc;
+      --canvas-ink: #d1d4dc;
+      --canvas-label-dark: #111827;
+      --canvas-label-light: #ffffff;
+    }
+
+    body.theme-light.ui-tv-black {
+      --bg: #ffffff;
+      --panel: #ffffff;
+      --panel-2: #f4f6f8;
+      --chart-bg: #ffffff;
+      --grid-line: #edf0f2;
+    }
+
+    body:not(.theme-light).ui-tv-black {
+      --chart-bg: #000000;
+      --grid-line: #161a22;
+    }
+
+    body.ui-tv-flat .side-panel,
+    body.ui-tv-flat .side-panel > .card,
+    body.ui-tv-flat .chart-panel,
+    body.ui-tv-flat .chart-frame,
+    body.ui-tv-flat .settings-panel,
+    body.ui-tv-flat .modal-card,
+    body.ui-tv-flat .context-menu,
+    body.ui-tv-flat .canvas-tooltip,
+    body.ui-tv-flat .status-tooltip,
+    body.ui-tv-flat .urgent-risk-feed {
+      background: var(--panel);
+      box-shadow: none;
+    }
+
+    body.ui-tv-flat .side-panel,
+    body.ui-tv-flat .side-panel > .card,
+    body.ui-tv-flat .chart-panel,
+    body.ui-tv-flat .card,
+    body.ui-tv-flat .decision,
+    body.ui-tv-flat .metric,
+    body.ui-tv-flat .watchlist-row,
+    body.ui-tv-flat .indicator-row,
+    body.ui-tv-flat .indicator-control-group,
+    body.ui-tv-flat .indicator-manager-panel,
+    body.ui-tv-flat .indicator-manager-row,
+    body.ui-tv-flat .trade-setup-runtime,
+    body.ui-tv-flat .indicator-runtime-row,
+    body.ui-tv-flat .object-row,
+    body.ui-tv-flat .object-tab {
+      border-color: transparent;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    body.ui-tv-flat .chart-top,
+    body.ui-tv-flat .side-tabs,
+    body.ui-tv-flat .workspace-presets,
+    body.ui-tv-flat .indicator-runtime,
+    body.ui-tv-flat .modal-head,
+    body.ui-tv-flat .modal-actions,
+    body.ui-tv-flat .object-properties {
+      border-color: var(--line);
+      background: var(--panel);
+      box-shadow: none;
+    }
+
+    body.ui-tv-flat .splitter,
+    body.ui-tv-flat .splitter::after {
+      background: var(--line);
+      opacity: 1;
+    }
+
+    body.ui-tv-flat .tool-button,
+    body.ui-tv-flat .price-fit-height-button,
+    body.ui-tv-flat .side-tab,
+    body.ui-tv-flat .workspace-preset,
+    body.ui-tv-flat .runtime-layout-btn,
+    body.ui-tv-flat .settings-control,
+    body.ui-tv-flat .preset-select,
+    body.ui-tv-flat .toggle span,
+    body.ui-tv-flat .indicator-runtime-state,
+    body.ui-tv-flat button.indicator-runtime-state,
+    body.ui-tv-flat .indicator-calc-status,
+    body.ui-tv-flat .gex-sidebar-icon-button,
+    body.ui-tv-flat .gex-sidebar-refresh-button,
+    body.ui-tv-flat .gex-context-mode-button,
+    body.ui-tv-flat .option-board-button,
+    body.ui-tv-flat .chart-advisor-button,
+    body.ui-tv-flat .indicator-manager-toggle,
+    body.ui-tv-flat .urgent-risk-feed .risk-feed-close,
+    body.ui-tv-flat .gex-sidebar-choice-grid button {
+      border-color: transparent;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    body.ui-tv-flat .tool-button:hover,
+    body.ui-tv-flat .side-tab:hover,
+    body.ui-tv-flat .workspace-preset:hover,
+    body.ui-tv-flat .runtime-layout-btn:hover,
+    body.ui-tv-flat .settings-control:hover,
+    body.ui-tv-flat .preset-select:hover,
+    body.ui-tv-flat .gex-sidebar-choice-grid button:hover,
+    body.ui-tv-flat .urgent-risk-feed .risk-feed-close:hover {
+      background: color-mix(in srgb, var(--panel-2) 82%, var(--text) 4%);
+      color: var(--text);
+    }
+
+    body.ui-tv-flat .side-tab.active,
+    body.ui-tv-flat .workspace-preset.active,
+    body.ui-tv-flat .runtime-layout-btn.active,
+    body.ui-tv-flat .tool-button.active,
+    body.ui-tv-flat .gex-sidebar-icon-button.active,
+    body.ui-tv-flat .gex-context-mode-button.active,
+    body.ui-tv-flat .option-board-button.active,
+    body.ui-tv-flat .chart-advisor-button.active,
+    body.ui-tv-flat .gex-sidebar-choice-grid button.active {
+      border-color: transparent;
+      background: color-mix(in srgb, var(--panel-2) 88%, var(--blue) 10%);
+      color: var(--blue);
+      box-shadow: none;
+    }
+
+    body.ui-tv-flat .watchlist-row,
+    body.ui-tv-flat .indicator-runtime-row,
+    body.ui-tv-flat .object-row {
+      border-top: 1px solid var(--line);
+    }
+
+    body.ui-tv-flat .watchlist-row.active,
+    body.ui-tv-flat .object-row.active {
+      outline: 1px solid color-mix(in srgb, var(--text) 72%, transparent);
+      outline-offset: -1px;
+      background: transparent;
+    }
+
+    body.ui-tv-flat .metric,
+    body.ui-tv-flat .indicator-row,
+    body.ui-tv-flat .trade-setup-runtime {
+      background: transparent;
+    }
+
+    body.ui-tv-flat .chart-theme-toggle {
+      background: transparent !important;
+      color: var(--text) !important;
+    }
+
+    @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+      body.ui-tv-flat .settings-panel,
+      body.ui-tv-flat .modal-card {
+        background: color-mix(in srgb, var(--panel) 92%, transparent);
+        -webkit-backdrop-filter: blur(8px) saturate(112%);
+        backdrop-filter: blur(8px) saturate(112%);
+      }
+    }

@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ui-architecture-gates
+        name: UI architecture gates
+        entry: make test-ui-gates
+        language: system
+        pass_filenames: false
+        always_run: true
