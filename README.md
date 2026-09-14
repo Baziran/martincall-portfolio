@@ -1,5 +1,9 @@
 # MartinCall / AEF Trading Terminal
 
+## Copyright and reuse
+
+**Copyright (c) 2026 Grigory Shmykov. All rights reserved.** Shared for recruitment and professional evaluation only, including AI-assisted review under the license conditions. Copying, running, modification, redistribution and reuse require prior written permission, subject to the limited evaluation and platform/legal exceptions in [LICENSE.md](LICENSE.md). No permission is granted for model training. This is not an open-source project.
+
 Local event-driven trading decision terminal for market research, replay, alerts, paper trading,
 and typed execution intent.
 
