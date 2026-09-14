@@ -1,8 +1,8 @@
 # MartinCall / AEF Trading Terminal
 
-**A personal market-research terminal — a portfolio of requirements ownership, systems integration and AI-assisted delivery.**
+**From a rough MVP to a working market-research system with explicit architecture, operating rules and acceptance checks.**
 
-By **Grigory Shmykov** — project initiator and product owner, responsible for technical direction and acceptance. Over six months, I led its continuous development from initial ideas to a working personal system: requirements, solution review, implementation cycles, performance and interface refinement, operational feedback and acceptance. It complements my professional background in manufacturing management and enterprise IT, with particular relevance to **technical project management, systems integration and IT implementation leadership**.
+By **Grigory Shmykov** — project initiator and product owner, responsible for technical direction and acceptance. Over six months, I led its evolution from a quickly assembled MVP to a working personal system with clear architectural responsibilities and stricter quality rules: requirements, solution review, implementation cycles, performance and interface refinement, operational feedback and acceptance. It complements my professional background in manufacturing management and enterprise IT, with particular relevance to **technical project management, systems integration and IT implementation leadership**.
 
 The application connects market-data providers, analysis, replay, alerts and paper trading in one local workspace. **My contribution:** original ideas and product direction, requirements, priorities, architectural review, testing of behavior and final acceptance of changes. **AI contribution:** substantial code generation and implementation assistance using Gemini and Codex.
 
