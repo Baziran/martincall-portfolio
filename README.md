@@ -1,26 +1,35 @@
 # MartinCall / AEF Trading Terminal
 
+**A personal market-research terminal — a portfolio of requirements ownership, systems integration and AI-assisted delivery.**
+
+By **Grigory Shmykov** — project initiator and product owner, responsible for technical direction and acceptance. Over six months, I led its continuous development from initial ideas to a working personal system: requirements, solution review, implementation cycles, performance and interface refinement, operational feedback and acceptance. It complements my professional background in manufacturing management and enterprise IT, with particular relevance to **technical project management, systems integration and IT implementation leadership**.
+
+The application connects market-data providers, analysis, replay, alerts and paper trading in one local workspace. **My contribution:** original ideas and product direction, requirements, priorities, architectural review, testing of behavior and final acceptance of changes. **AI contribution:** substantial code generation and implementation assistance using Gemini and Codex.
+
+[Role and evidence walkthrough](docs/PORTFOLIO.md) · [Development history and snapshot](PORTFOLIO_SNAPSHOT.md) · [Current task list and acceptance criteria](docs/TODO.md)
+
+## Six months of continuous product development
+
+- Defined boundaries between confirmed market data, incomplete information, signals and execution intent.
+- Challenged AI proposals that added unnecessary branches, duplicate logic or workarounds outside the intended architecture; required corrections at the responsible module.
+- Drove repeated review and correction cycles across features, integration, performance and interface design. See the [development process and one traced example](docs/PORTFOLIO.md#continuous-development-and-acceptance).
+- Reviewed outcomes against requirements and required rework until the behavior met acceptance expectations. The [product principles](docs/PROJECT_IDEOLOGY.md) and [ownership map](docs/ARCHITECTURE.md#ownership-map) document the intended boundaries.
+
+My enterprise team experience includes coordinating factory departments and external integrators. In MartinCall, I directed AI-assisted implementation and retained responsibility for product decisions and acceptance.
+
+## What is available to assess
+
+This is a **dated source snapshot of a privately developed project**, prepared from a baseline with **1,355 commits**. Its short public history records publication updates, not the original development sequence. Earlier private history and local configuration are excluded; see [snapshot provenance](PORTFOLIO_SNAPSHOT.md).
+
+The source includes provider adapters, persistent state, a browser interface, tests and CI workflows. Current scope ends at research, replay, alerts, paper trading and typed execution intent. Live broker order placement, commercial adoption, measured trading performance and high-load production operation are outside this portfolio’s demonstrated scope. A guided demonstration can focus on one instrument and its data-to-decision path.
+
+Current source baseline: **MartinCall 1.5.0 private**, storage schema v18. The version identifies the source contract; this is not a hosted public trading service.
+
 ## Copyright and reuse
 
 **Copyright (c) 2026 Grigory Shmykov. All rights reserved.** Shared for recruitment and professional evaluation only, including AI-assisted review under the license conditions. Copying, running, modification, redistribution and reuse require prior written permission, subject to the limited evaluation and platform/legal exceptions in [LICENSE.md](LICENSE.md). No permission is granted for model training. This is not an open-source project.
 
-Local event-driven trading decision terminal for market research, replay, alerts, paper trading,
-and typed execution intent.
-
-Current release baseline: **MartinCall 1.5.0 private**, canonical storage schema v18.
-
-This is a [public portfolio source snapshot](PORTFOLIO_SNAPSHOT.md).
-
-## Portfolio overview
-
-A personal, non-commercial project by **Grigory Shmykov**, developed with Gemini and Codex.
-I lead product requirements, task decomposition, architectural review and iterative validation;
-AI tools contribute substantially to implementation.
-
-For a short overview of the user problem, my contribution and a guided review, start with the
-[portfolio walkthrough](docs/PORTFOLIO.md). Technical setup and operator instructions continue below.
-Credential handling and publication boundaries are documented in [Security](SECURITY.md).
-
+## Technical overview
 
 The project is intentionally modular. Each block has a narrow responsibility and can be
 replaced without rewriting the whole terminal:
