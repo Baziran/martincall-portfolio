@@ -4,6 +4,12 @@
 
 MartinCall is a personal, non-commercial project by **Grigory Shmykov**, developed with Gemini and Codex. It brings provider integrations, persistent data, analysis, alerts and a browser interface into one application.
 
+## Origin: a charting problem in my own workflow
+
+The project began with a specific frustration while using TradingView. When constructing a chart channel, I encountered drawing objects that would not appear until the relevant historical bars had been loaded into memory. I repeatedly had to drag the chart left to load those bars and deal with inconsistent display behavior. It interrupted the analysis I was trying to perform.
+
+That experience prompted me to build my own tool. The starting point was a practical charting problem; through successive ideas, implementation and review, the initial MVP grew into the broader MartinCall system described here. This account describes my experience at the time, rather than a general claim about every TradingView version or workflow.
+
 ## Role, contribution and evidence
 
 I initiated MartinCall and owned its product direction from the original ideas through implementation, operational feedback and acceptance. I defined what the system should do, challenged proposed solutions and required rework until the result matched the intended behavior. The project makes my work in technical project management, systems integration and implementation leadership visible alongside my enterprise IT and manufacturing experience.
