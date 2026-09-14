@@ -2,7 +2,9 @@
 
 **From a rough MVP to a working market-research system with explicit architecture, operating rules and acceptance checks.**
 
-By **Grigory Shmykov** — project initiator and product owner, responsible for technical direction and acceptance. Over six months, I led iterative development, architectural review, performance and interface refinement, and acceptance in personal use. This complements my professional experience in enterprise IT and manufacturing management.
+By **Grigory Shmykov** — project initiator and product owner, responsible for technical direction and acceptance. Since late April 2026, I have led iterative development, architectural review, performance and interface refinement, and acceptance in personal use. This complements my professional experience in enterprise IT and manufacturing management.
+
+**Portfolio snapshot:** this repository starts a separate public history from private baseline `1b5abf06`, which contains **1,355 commits**. Its public commit count covers publication and subsequent maintenance, rather than the full development history. I actively worked to reduce code volume and unnecessary complexity while improving the system. See [snapshot provenance](PORTFOLIO_SNAPSHOT.md).
 
 ## Why I built it
 

@@ -1,6 +1,6 @@
 # MartinCall: product and technical portfolio
 
-**Six months of product evolution: from a rough MVP to a working market-research system with explicit architecture and acceptance rules.**
+**Product evolution since late April 2026: from a rough MVP to a working market-research system with explicit architecture and acceptance rules.**
 
 MartinCall is a personal, non-commercial project by **Grigory Shmykov**, developed with Gemini and Codex. It brings provider integrations, persistent data, analysis, alerts and a browser interface into one application.
 
@@ -29,7 +29,7 @@ I initiated MartinCall and owned its product direction from the original ideas t
 
 ## Continuous development and acceptance
 
-MartinCall began as a quickly assembled MVP. Over **six months of continuous development**, I directed its evolution into a working system with explicit module responsibilities, integration contracts, operating rules and acceptance checks. As the product grew, I raised the quality bar and required existing implementations to be revisited when they no longer met it. I generated ideas, set direction, reviewed proposed approaches and implementation results, requested corrections and accepted completed work. The process repeatedly returned to performance, interface quality, integration behavior and architectural consistency as the application evolved in personal use.
+MartinCall began as a quickly assembled MVP. Through **continuous development since late April 2026**, I have directed its evolution into a working system with explicit module responsibilities, integration contracts, operating rules and acceptance checks. As the product grew, I raised the quality bar and required existing implementations to be revisited when they no longer met it. I generated ideas, set direction, reviewed proposed approaches and implementation results, requested corrections and accepted completed work. The process repeatedly returned to performance, interface quality, integration behavior and architectural consistency as the application evolved in personal use.
 
 The working cycle was: **idea or observed problem → requirements and proposed solution → review → AI-assisted implementation → behavioral checks and rework → acceptance → further operational feedback**. Code review and corrections formed part of these cycles. AI tools performed substantial implementation and assisted with technical analysis; I retained product direction and the decision to accept or request more work.
 
