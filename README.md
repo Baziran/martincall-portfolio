@@ -2,30 +2,23 @@
 
 **From a rough MVP to a working market-research system with explicit architecture, operating rules and acceptance checks.**
 
-**Why I started:** in my TradingView workflow, constructing a chart channel meant repeatedly dragging the chart left to load older bars before the drawing objects would appear. Loading and display problems kept interrupting the analysis. Pine Script’s compiled-code limits also constrained the custom scripts and indicators I wanted to develop. Together, these constraints motivated an independent application where I could control the charting workflow and extend the analysis logic outside the Pine runtime.
+By **Grigory Shmykov** — project initiator and product owner, responsible for technical direction and acceptance. Over six months, I led iterative development, architectural review, performance and interface refinement, and acceptance in personal use. This complements my professional experience in enterprise IT and manufacturing management.
 
-By **Grigory Shmykov** — project initiator and product owner, responsible for technical direction and acceptance. Over six months, I led its evolution from a quickly assembled MVP to a working personal system with clear architectural responsibilities and stricter quality rules: requirements, solution review, implementation cycles, performance and interface refinement, operational feedback and acceptance. It complements my professional background in manufacturing management and enterprise IT, with particular relevance to **technical project management, systems integration and IT implementation leadership**.
+## Why I built it
 
-The application connects market-data providers, analysis, replay, alerts and paper trading in one local workspace. **My contribution:** original ideas and product direction, requirements, priorities, architectural review, testing of behavior and final acceptance of changes. **AI contribution:** substantial code generation and implementation assistance using Gemini and Codex.
+In my TradingView workflow, constructing a chart channel meant repeatedly dragging the chart left to load older bars before drawing objects would appear. Pine Script’s compiled-code limits also constrained the custom indicators I wanted to develop. These frustrations motivated an independent application where I could control the charting workflow and extend the analysis logic outside the Pine runtime.
 
-[Role and evidence walkthrough](docs/PORTFOLIO.md) · [Development history and snapshot](PORTFOLIO_SNAPSHOT.md) · [Current task list and acceptance criteria](docs/TODO.md)
+## What I delivered and how
 
-## Six months of continuous product development
+The system connects market-data providers, custom analysis, replay, alerts and paper trading in one local workspace. I originated ideas, set requirements and priorities, challenged unnecessary complexity and architectural workarounds, and required corrections before acceptance. Gemini and Codex contributed substantially to code generation and technical implementation.
 
-- Defined boundaries between confirmed market data, incomplete information, signals and execution intent.
-- Challenged AI proposals that added unnecessary branches, duplicate logic or workarounds outside the intended architecture; required corrections at the responsible module.
-- Drove repeated review and correction cycles across features, integration, performance and interface design. See the [development process and one traced example](docs/PORTFOLIO.md#continuous-development-and-acceptance).
-- Reviewed outcomes against requirements and required rework until the behavior met acceptance expectations. The [product principles](docs/PROJECT_IDEOLOGY.md) and [ownership map](docs/ARCHITECTURE.md#ownership-map) document the intended boundaries.
+For **technical project management, systems integration and IT implementation leadership**, start here:
 
-My enterprise team experience includes coordinating factory departments and external integrators. In MartinCall, I directed AI-assisted implementation and retained responsibility for product decisions and acceptance.
+- [My role, development process and a traced delivery example](docs/PORTFOLIO.md)
+- [Product principles](docs/PROJECT_IDEOLOGY.md), [architecture ownership](docs/ARCHITECTURE.md#ownership-map) and [backlog with acceptance criteria](docs/TODO.md)
+- [Snapshot provenance and completed CI checks](PORTFOLIO_SNAPSHOT.md): this public snapshot starts a separate history from a private baseline with 1,355 commits.
 
-## What is available to assess
-
-This is a **dated source snapshot of a privately developed project**, prepared from a baseline with **1,355 commits**. Its short public history records publication updates, not the original development sequence. Earlier private history and local configuration are excluded; see [snapshot provenance](PORTFOLIO_SNAPSHOT.md).
-
-The source includes provider adapters, persistent state, a browser interface, tests and CI workflows. Current scope ends at research, replay, alerts, paper trading and typed execution intent. Live broker order placement, commercial adoption, measured trading performance and high-load production operation are outside this portfolio’s demonstrated scope. A guided demonstration can focus on one instrument and its data-to-decision path.
-
-Current source baseline: **MartinCall 1.5.0 private**, storage schema v18. The version identifies the source contract; this is not a hosted public trading service.
+**Scope:** personal research and paper trading; live broker order placement remains future work. Commercial adoption, trading performance and high-load operation are not claimed. The published source baseline is MartinCall 1.5.0 private / storage schema v18. A guided demonstration can follow one instrument from data to decision.
 
 ## Copyright and reuse
 
@@ -33,8 +26,8 @@ Current source baseline: **MartinCall 1.5.0 private**, storage schema v18. The v
 
 ## Technical overview
 
-The project is intentionally modular. Each block has a narrow responsibility and can be
-replaced without rewriting the whole terminal:
+The project separates module responsibilities. Changes must respect the documented contracts
+and account for affected consumers:
 
 - `data`: provider adapters, normalized bars/ticks/quotes, backfill, and repair.
 - `features`: candle, volume, speed, and context feature extraction.
@@ -48,9 +41,8 @@ replaced without rewriting the whole terminal:
 
 ## Product doctrine
 
-MartinCall is not a generic charting clone. It is a local decision terminal: fast enough
-for live operation, deterministic enough for replay/backtest, and explicit enough to audit
-why a signal exists.
+MartinCall is not a generic charting clone. Its design goals are responsive local operation, deterministic replay/backtest behavior,
+and an explicit explanation of why a signal exists.
 
 Use [PROJECT_IDEOLOGY.md](docs/PROJECT_IDEOLOGY.md) for stable product principles. For technical
 work, select only the relevant sections from the
