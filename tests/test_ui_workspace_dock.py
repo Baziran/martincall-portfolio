@@ -111,6 +111,8 @@ def test_mobile_toolbar_scroll_reaches_settings_control(dock_page: Page) -> None
     page.evaluate("document.body.classList.add('view-preset-mobile')")
 
     toolbar = page.locator(".chart-tools")
+    # Exercise overflow independently of platform font metrics at the same viewport.
+    toolbar.evaluate("element => { element.style.width = '160px'; }")
     before = toolbar.evaluate(
         "element => ({ clientWidth: element.clientWidth, scrollWidth: element.scrollWidth })"
     )

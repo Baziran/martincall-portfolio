@@ -23,3 +23,7 @@ Configuration templates and disposable CI test credentials are examples, not cre
 - No application or database restart was performed. No trading-performance claim is made.
 
 The full runtime suite was not rerun for this source-publication preparation. The existing workflows are included so future changes can be checked in CI.
+
+## Publication CI adjustments
+
+Ruff is pinned to the verified 0.15.22 development-tool version so a fresh CI installation does not silently change the lint baseline. The mobile-toolbar browser fixture uses an explicit narrow width to test overflow independently of platform font metrics; the scroll and settings-visibility assertions remain enabled. Application behavior is unchanged.
